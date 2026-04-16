@@ -83,34 +83,39 @@ body{font-family:'Manrope',sans-serif;color:var(--text);display:flex}
 .empty h3{font-size:16px;font-weight:700}.empty p{font-size:13px;color:var(--t2);max-width:240px;line-height:1.5}
 
 /* ── GRID ── */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
 
 /* ── CARD ── */
-.card{background:var(--card);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:transform .14s,box-shadow .14s}
-.card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
-.cv{aspect-ratio:1;background:var(--bg);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.cv img{width:100%;height:100%;object-fit:cover}
-.ve{display:flex;flex-direction:column;align-items:center;gap:6px}
-.ve svg{opacity:.18}.ve span{font-size:11px;color:var(--t3)}
-.sp{position:absolute;top:8px;left:8px;padding:3px 7px;border-radius:20px;font-size:10px;font-weight:700}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);transition:transform .14s,box-shadow .14s;display:flex;align-items:stretch;overflow:hidden;padding:12px 14px;gap:12px}
+.card:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.09)}
+/* thumbnail */
+.cv{width:56px;height:56px;min-width:56px;border-radius:10px;background:var(--bg);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cv img,.cv video{width:100%;height:100%;object-fit:cover}
+.ve{display:flex;flex-direction:column;align-items:center;gap:3px}
+.ve svg{opacity:.18}.ve span{font-size:9px;color:var(--t3)}
+/* status/platform pills on thumb */
+.sp{position:absolute;inset:0;display:none}
+.pi{position:absolute;bottom:2px;right:2px;width:16px;height:16px;border-radius:4px;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:800;color:var(--text)}
 .s-draft{background:rgba(255,255,255,.88);color:var(--t2)}
 .s-scheduled{background:rgba(255,149,0,.14);color:#b87000;border:1px solid rgba(255,149,0,.28)}
 .s-published{background:rgba(52,199,89,.14);color:#1f8f3a;border:1px solid rgba(52,199,89,.28)}
-.pi{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:7px;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--text)}
 
 /* post type badge */
-.type-b{position:absolute;bottom:8px;left:8px;padding:2px 7px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:.4px}
+.type-b{display:none}
 .tb-org{background:rgba(0,122,255,.13);color:#0055cc;border:1px solid rgba(0,122,255,.22)}
 .tb-ad{background:rgba(255,149,0,.15);color:#b87000;border:1px solid rgba(255,149,0,.28)}
 
 /* download btn on card */
-.dl-btn{position:absolute;bottom:8px;right:8px;width:26px;height:26px;border-radius:8px;border:none;background:rgba(255,255,255,.9);color:var(--blue);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .12s}
-.dl-btn:hover{background:#fff}
+.dl-btn{width:24px;height:24px;border-radius:7px;border:none;background:var(--bg);color:var(--blue);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .12s;flex-shrink:0}
+.dl-btn:hover{background:#EEF5FF}
 
-.cb{padding:11px 13px 13px}
-.cap{font-size:13px;color:var(--text);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:36px}
+.cb{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
+.card-top{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.card-status{padding:2px 7px;border-radius:20px;font-size:10px;font-weight:700}
+.card-type{padding:2px 6px;border-radius:4px;font-size:9px;font-weight:700}
+.cap{font-size:13px;color:var(--text);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .cap.dim{color:var(--t3);font-style:italic}
-.cm{display:flex;align-items:center;justify-content:space-between;margin-top:9px}
+.cm{display:flex;align-items:center;justify-content:space-between;margin-top:7px}
 .cdate{font-size:11px;color:var(--t3);font-weight:500;display:flex;align-items:center;gap:3px}
 .cbtns{display:flex;gap:3px}
 .ib{width:26px;height:26px;border-radius:7px;border:none;background:var(--bg);color:var(--t2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s}
@@ -330,6 +335,14 @@ select{cursor:pointer}select option{background:#fff}
         <h1>Taken voor <span id="todayDateLabel">vandaag</span></h1>
         <div class="top-sub" id="todaySub"></div>
       </div>
+      <div class="top-r">
+        <div class="seg">
+          <button class="seg-btn" onclick="chDay(-1)">‹ Vorige</button>
+          <button class="seg-btn on" id="btnToday" onclick="goToday()">Vandaag</button>
+          <button class="seg-btn" onclick="chDay(1)">Volgende ›</button>
+        </div>
+        <input type="date" id="dayPicker" style="padding:6px 10px;font-size:12px;border-radius:var(--rx);border:1px solid var(--sep);background:var(--card);color:var(--text);font-family:Manrope,sans-serif;cursor:pointer;box-shadow:var(--sh-sm)" oninput="pickDay(this.value)"/>
+      </div>
     </div>
     <div class="area" id="todayArea"></div>
   </div>
@@ -373,15 +386,20 @@ select{cursor:pointer}select option{background:#fff}
       </div>
 
       <div class="fi">
-        <label>Visual</label>
+        <label>Bestand (afbeelding, video of PDF)</label>
         <div id="uz" class="uz" ondragover="dOv(event)" ondragleave="dLv(event)" ondrop="dDp(event)">
-          <input type="file" accept="image/*" onchange="hImg(event)"/>
-          <div style="font-size:22px;margin-bottom:5px;opacity:.25">🖼</div>
+          <input type="file" accept="image/*,video/*,application/pdf" onchange="hImg(event)"/>
+          <div style="font-size:22px;margin-bottom:5px;opacity:.25">📎</div>
           <p>Sleep hierheen of <b>klik om te uploaden</b></p>
-          <small>PNG, JPG, WEBP</small>
+          <small>Afbeelding, video (MP4/MOV) of PDF</small>
         </div>
         <div id="pvBox" style="display:none" class="pv">
-          <img id="pvImg" src="" alt="">
+          <img id="pvImg" src="" alt="" style="display:none">
+          <video id="pvVid" src="" controls style="display:none;width:100%;height:100%;object-fit:cover"></video>
+          <div id="pvPdf" style="display:none;width:100%;height:100%;background:var(--bg);display:none;align-items:center;justify-content:center;flex-direction:column;gap:8px">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="4" y="2" width="20" height="26" rx="3" stroke="#FF3B30" stroke-width="1.5"/><path d="M4 10h20M10 2v8" stroke="#FF3B30" stroke-width="1.5" stroke-linecap="round"/><path d="M10 17h8M10 21h5" stroke="#FF3B30" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <span id="pvPdfName" style="font-size:11px;font-weight:600;color:var(--t2);text-align:center;padding:0 8px;word-break:break-all"></span>
+          </div>
           <div class="pv-btns">
             <button class="pdl" onclick="dlImg()" title="Downloaden">
               <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v6M3 5l2.5 2.5L8 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 9h9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
@@ -425,7 +443,7 @@ select{cursor:pointer}select option{background:#fff}
 
 <script>
 // ── STATE ──
-let clients=[],posts={},aid=null,filt='all',view='grid',eid=null,tags=[],img=null,imgName=null,cal=new Date(),postType='organic',checked={};
+let clients=[],posts={},aid=null,filt='all',view='grid',eid=null,tags=[],img=null,imgName=null,imgFileType=null,cal=new Date(),postType='organic',checked={},viewDate=new Date();
 const COLS=['#1DC9A4','#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#F7B731','#9B59B6','#E67E22','#2ECC71','#3498DB'];
 const SNL={draft:'Concept',scheduled:'Gepland',published:'Gepubliceerd'};
 const SCL={draft:'s-draft',scheduled:'s-scheduled',published:'s-published'};
@@ -452,11 +470,28 @@ async function ld(){
   if(!window.storage){const d={};window.storage={get:async k=>k in d?{value:d[k]}:null,set:async(k,v)=>{d[k]=v;return{key:k,value:v}}}}
   await ld();iCP();
   document.getElementById('pDt').value=new Date().toISOString().split('T')[0];
-  const dn=new Date().toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long'});
-  document.getElementById('todayDateLabel').textContent=dn;
+  document.getElementById('dayPicker').value=new Date().toISOString().split('T')[0];
+  updateViewDateLabel();
 })();
 
 function todayKey(){return new Date().toISOString().split('T')[0]}
+function viewKey(){return viewDate.toISOString().split('T')[0]}
+function isToday(){return viewKey()===todayKey()}
+
+function updateViewDateLabel(){
+  const d=viewDate;
+  const label=isToday()?'vandaag':d.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long'});
+  document.getElementById('todayDateLabel').textContent=label;
+  document.getElementById('dayPicker').value=viewKey();
+  document.getElementById('btnToday').classList.toggle('on',isToday());
+}
+
+function chDay(delta){
+  viewDate=new Date(viewDate);viewDate.setDate(viewDate.getDate()+delta);
+  updateViewDateLabel();rToday();
+}
+function goToday(){viewDate=new Date();updateViewDateLabel();rToday();}
+function pickDay(val){if(!val)return;viewDate=new Date(val+'T12:00:00');updateViewDateLabel();rToday();}
 
 // ── NAV ──
 function switchNav(tab){
@@ -551,25 +586,35 @@ function typeLabel(t){return t==='ad'?'Advertentie':'Organisch'}
 function typeCls(t){return t==='ad'?'tb-ad':'tb-org'}
 function typeSmall(t){return t==='ad'?'todo-type tb-ad':'todo-type tb-org'}
 
+function fileThumb(p){
+  if(!p.imgData) return `<div class="ve"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="2" width="18" height="18" rx="3" stroke="#C7C7CC" stroke-width="1.4"/><circle cx="7.5" cy="8.5" r="1.5" fill="#C7C7CC"/><path d="M2 15l5-4 4 4 2.5-2.5 6.5 6" stroke="#C7C7CC" stroke-width="1.4" stroke-linecap="round"/></svg></div>`;
+  if(p.fileType==='pdf') return `<div class="ve"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="1" width="14" height="18" rx="2" stroke="#FF3B30" stroke-width="1.4"/><path d="M2 7h14M6 1v6" stroke="#FF3B30" stroke-width="1.4" stroke-linecap="round"/><path d="M6 12h6M6 15h4" stroke="#FF3B30" stroke-width="1.4" stroke-linecap="round"/></svg></div>`;
+  if(p.fileType==='video') return `<div class="ve" style="background:#000;border-radius:inherit;width:100%;height:100%;"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" style="opacity:.6"><circle cx="11" cy="11" r="9" stroke="#fff" stroke-width="1.4"/><path d="M9 8l6 3-6 3V8z" fill="#fff"/></svg></div>`;
+  return `<img src="${p.imgData}" alt="">`;
+}
+
+function todoThumb(p){
+  if(!p.imgData) return '📎';
+  if(p.fileType==='pdf') return '<svg width="20" height="20" viewBox="0 0 22 22" fill="none"><rect x="2" y="1" width="14" height="18" rx="2" stroke="#FF3B30" stroke-width="1.4"/><path d="M2 7h14M6 1v6" stroke="#FF3B30" stroke-width="1.4" stroke-linecap="round"/></svg>';
+  if(p.fileType==='video') return '<svg width="20" height="20" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="9" stroke="#6D6D72" stroke-width="1.4"/><path d="M9 8l6 3-6 3V8z" fill="#6D6D72"/></svg>';
+  return `<img src="${p.imgData}" alt="">`;
+}
+
 function cCard(p){
-  const vis=p.imgData
-    ?`<img src="${p.imgData}" alt="">`
-    :`<div class="ve"><svg width="26" height="26" viewBox="0 0 26 26" fill="none"><rect x="2" y="2" width="22" height="22" rx="4" stroke="#C7C7CC" stroke-width="1.5"/><circle cx="9" cy="10" r="2" fill="#C7C7CC"/><path d="M2 18l6-5 5 5 3-3 8 7" stroke="#C7C7CC" stroke-width="1.5" stroke-linecap="round"/></svg><span>Geen visual</span></div>`;
   const dt=p.date?new Date(p.date).toLocaleDateString('nl-NL',{day:'numeric',month:'short'}):'—';
-  const dlBtn=p.imgData?`<button class="dl-btn" onclick="dlImgCard('${p.id}')" title="Visual downloaden"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v6M3 5l2.5 2.5L8 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 9.5h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>`:'';
+  const dlBtn=p.imgData?`<button class="dl-btn" onclick="dlImgCard('${p.id}')" title="Downloaden"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1v5.5M3 5l2 2 2-2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 8.5h8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>`:'';
   return`<div class="card">
-    <div class="cv">
-      <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center">${vis}</div>
-      <div class="sp ${SCL[p.status]}">${SNL[p.status]}</div>
-      <div class="pi">${p.platform.slice(0,2).toUpperCase()}</div>
-      <div class="type-b ${typeCls(p.postType)}">${typeLabel(p.postType)}</div>
-      ${dlBtn}
-    </div>
+    <div class="cv">${fileThumb(p)}<div class="pi">${p.platform.slice(0,2).toUpperCase()}</div></div>
     <div class="cb">
+      <div class="card-top">
+        <span class="card-status ${SCL[p.status]}">${SNL[p.status]}</span>
+        <span class="card-type ${typeCls(p.postType)}">${typeLabel(p.postType)}</span>
+      </div>
       <div class="cap${p.caption?'':' dim'}">${p.caption?e(p.caption):'Geen caption'}</div>
       <div class="cm">
-        <div class="cdate"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><rect x=".5" y="1" width="8" height="7.5" rx="1.5" stroke="#AEAEB2" stroke-width="1" fill="none"/><path d="M.5 3.5h8M2.5 1v1M6.5 1v1" stroke="#AEAEB2" stroke-width="1" stroke-linecap="round"/></svg>${dt}</div>
+        <div class="cdate"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><rect x=".5" y="1" width="8" height="7.5" rx="1.5" stroke="#AEAEB2" stroke-width="1" fill="none"/><path d="M.5 3.5h8M2.5 1v1M6.5 1v1" stroke="#AEAEB2" stroke-width="1" stroke-linecap="round"/></svg>${dt}${p.time?' · '+p.time:''}</div>
         <div class="cbtns">
+          ${dlBtn}
           <button class="ib" onclick="editP('${p.id}')"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M7 1.5l1.5 1.5-5.5 5.5H1.5v-2L7 1.5z" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           <button class="ib del" onclick="delP('${p.id}')"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 3h7M3.5 3V2h3v1M2.5 3l.5 5.5h4.5L8 3" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg></button>
         </div>
@@ -579,7 +624,7 @@ function cCard(p){
 }
 
 function cList(p){
-  const vis=p.imgData?`<img src="${p.imgData}" alt="">`:`<div class="lt-e">🖼</div>`;
+  const vis=fileThumb(p);
   const dt=p.date?new Date(p.date).toLocaleDateString('nl-NL',{day:'numeric',month:'short',year:'numeric'}):'—';
   const dlBtn=p.imgData?`<button class="ib" onclick="dlImgCard('${p.id}')" title="Downloaden"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1v5.5M3 5l2 2 2-2" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 8.5h8" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg></button>`:'';
   return`<div class="li">
@@ -637,8 +682,7 @@ function chM(d){cal.setMonth(cal.getMonth()+d);rC()}
 // ── TODAY VIEW ──
 function rToday(){
   const area=document.getElementById('todayArea');
-  const tk=todayKey();
-  // gather all posts for today across all clients
+  const tk=viewKey();
   const todayPosts=[];
   clients.forEach(c=>{
     const cp=(posts[c.id]||[]).filter(p=>p.date===tk);
@@ -646,10 +690,11 @@ function rToday(){
   });
   const total=todayPosts.reduce((s,g)=>s+g.posts.length,0);
   const done=todayPosts.reduce((s,g)=>s+g.posts.filter(p=>checked[tk+'_'+p.id]).length,0);
-  document.getElementById('todaySub').textContent=`${done} van ${total} afgerond`;
+  document.getElementById('todaySub').textContent=total?`${done} van ${total} afgerond`:'Geen posts ingepland';
 
   if(!total){
-    area.innerHTML=`<div class="today-empty"><div style="font-size:44px;opacity:.15">✅</div><h3>Niets te doen vandaag!</h3><p>Er staan geen posts ingepland voor vandaag.</p></div>`;
+    const msg=isToday()?'Er staan geen posts ingepland voor vandaag.':'Er staan geen posts ingepland op deze datum.';
+    area.innerHTML=`<div class="today-empty"><div style="font-size:44px;opacity:.15">📅</div><h3>${isToday()?'Niets te doen!':'Dag vrij'}</h3><p>${msg}</p></div>`;
     return;
   }
 
@@ -671,7 +716,7 @@ function rToday(){
     ps.sort((a,b)=>(a.time||'').localeCompare(b.time||'')).forEach(p=>{
       const ck=tk+'_'+p.id;
       const isDone=!!checked[ck];
-      const thumb=p.imgData?`<img src="${p.imgData}" alt="">`:'🖼';
+      const thumb=todoThumb(p);
       const dlBtn=p.imgData?`<button class="todo-dl" onclick="dlTodo('${p.id}','${c.id}')" title="Downloaden"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v7M3.5 6l2.5 2.5L8.5 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 10.5h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>`:'';
       html+=`<div class="todo${isDone?' done':''}" id="todo_${ck.replace(/[^a-z0-9]/gi,'_')}">
         <div class="chk${isDone?' on':''}" onclick="toggleTodo('${ck}')">
@@ -750,7 +795,7 @@ function openPM(){
 
 function editP(id){
   const p=(posts[aid]||[]).find(x=>x.id===id);if(!p)return;
-  eid=id;tags=[...(p.hashtags||[])];img=p.imgData||null;imgName=p.imgName||null;
+  eid=id;tags=[...(p.hashtags||[])];img=p.imgData||null;imgName=p.imgName||null;imgFileType=p.fileType||null;
   setType(p.postType||'organic');
   document.getElementById('pmTitle').textContent='Post bewerken';
   document.getElementById('pCap').value=p.caption||'';
@@ -758,7 +803,7 @@ function editP(id){
   document.getElementById('pSt').value=p.status||'draft';
   document.getElementById('pDt').value=p.date||'';
   document.getElementById('pTm').value=p.time||'09:00';
-  rTags();img?shPv(img):rImg();
+  rTags();img?shPv(img,imgFileType,imgName):rImg();
   document.getElementById('pm').style.display='flex';
 }
 
@@ -767,7 +812,7 @@ function closePM(){document.getElementById('pm').style.display='none'}
 function saveP(){
   const cap=document.getElementById('pCap').value.trim();
   if(!cap&&!img)return document.getElementById('pCap').focus();
-  const d={caption:cap,platform:document.getElementById('pPl').value,status:document.getElementById('pSt').value,date:document.getElementById('pDt').value,time:document.getElementById('pTm').value,hashtags:[...tags],imgData:img,imgName:imgName,postType};
+  const d={caption:cap,platform:document.getElementById('pPl').value,status:document.getElementById('pSt').value,date:document.getElementById('pDt').value,time:document.getElementById('pTm').value,hashtags:[...tags],imgData:img,imgName:imgName,fileType:imgFileType,postType};
   if(!posts[aid])posts[aid]=[];
   if(eid){const i=posts[aid].findIndex(p=>p.id===eid);if(i>-1)posts[aid][i]={...posts[aid][i],...d}}
   else{posts[aid].push({id:'p'+Date.now(),...d})}
@@ -780,15 +825,45 @@ function delP(id){
   sv();rSB();rStats();rC();updateTodayBadge();toast('Post verwijderd');
 }
 
-// ── IMAGE ──
+// ── FILE UPLOAD ──
 function hImg(ev){const f=ev.target.files[0];if(f){imgName=f.name;rf(f)}}
 function dOv(ev){ev.preventDefault();document.getElementById('uz').classList.add('over')}
 function dLv(){document.getElementById('uz').classList.remove('over')}
-function dDp(ev){ev.preventDefault();dLv();const f=ev.dataTransfer.files[0];if(f&&f.type.startsWith('image/')){imgName=f.name;rf(f)}}
-function rf(f){const r=new FileReader();r.onload=ev=>{img=ev.target.result;shPv(img)};r.readAsDataURL(f)}
-function shPv(d){document.getElementById('uz').style.display='none';document.getElementById('pvBox').style.display='block';document.getElementById('pvImg').src=d}
-function rImg(){img=null;imgName=null;document.getElementById('uz').style.display='block';document.getElementById('pvBox').style.display='none';document.getElementById('pvImg').src=''}
-function rmImg(){img=null;imgName=null;rImg()}
+function dDp(ev){
+  ev.preventDefault();dLv();
+  const f=ev.dataTransfer.files[0];
+  if(f&&(f.type.startsWith('image/')||f.type.startsWith('video/')||f.type==='application/pdf')){imgName=f.name;rf(f)}
+}
+function rf(f){
+  const r=new FileReader();
+  r.onload=ev=>{
+    img=ev.target.result;
+    if(f.type.startsWith('video/'))imgFileType='video';
+    else if(f.type==='application/pdf')imgFileType='pdf';
+    else imgFileType='image';
+    shPv(img,imgFileType,f.name);
+  };
+  r.readAsDataURL(f);
+}
+function shPv(d,type,name){
+  document.getElementById('uz').style.display='none';
+  document.getElementById('pvBox').style.display='block';
+  const pvImg=document.getElementById('pvImg');
+  const pvVid=document.getElementById('pvVid');
+  const pvPdf=document.getElementById('pvPdf');
+  pvImg.style.display='none';pvVid.style.display='none';pvPdf.style.display='none';
+  if(type==='video'){pvVid.src=d;pvVid.style.display='block'}
+  else if(type==='pdf'){pvPdf.style.display='flex';document.getElementById('pvPdfName').textContent=name||'document.pdf'}
+  else{pvImg.src=d;pvImg.style.display='block'}
+}
+function rImg(){
+  img=null;imgName=null;imgFileType=null;
+  document.getElementById('uz').style.display='block';
+  document.getElementById('pvBox').style.display='none';
+  document.getElementById('pvImg').src='';
+  document.getElementById('pvVid').src='';
+}
+function rmImg(){img=null;imgName=null;imgFileType=null;rImg()}
 
 // download from modal preview
 function dlImg(){
