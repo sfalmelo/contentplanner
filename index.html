@@ -213,11 +213,18 @@ select{cursor:pointer}select option{background:#fff}
 .uz:hover,.uz.over{border-color:var(--accent);background:var(--accent-l)}
 .uz input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .uz p{font-size:13px;color:var(--t2);line-height:1.4}.uz p b{color:var(--accent)}.uz small{font-size:11px;color:var(--t3)}
-.pv{border-radius:var(--rs);overflow:hidden;aspect-ratio:1;position:relative;box-shadow:var(--sh)}
-.pv img{width:100%;height:100%;object-fit:cover}
-.pv-btns{position:absolute;top:7px;right:7px;display:flex;gap:5px}
-.prm,.pdl{width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700}
-.prm{background:rgba(255,59,48,.88);color:#fff}.pdl{background:rgba(255,255,255,.92);color:var(--blue)}
+.pv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px}
+.pv-item{border-radius:var(--rx);overflow:hidden;aspect-ratio:1;position:relative;box-shadow:var(--sh-sm);background:var(--bg)}
+.pv-item img,.pv-item video{width:100%;height:100%;object-fit:cover}
+.pv-item-pdf{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:6px}
+.pv-item-pdf span{font-size:9px;color:var(--t2);text-align:center;word-break:break-all;line-height:1.3}
+.pv-item-overlay{position:absolute;top:4px;right:4px;display:flex;gap:3px;opacity:0;transition:opacity .12s}
+.pv-item:hover .pv-item-overlay{opacity:1}
+.prm,.pdl{width:22px;height:22px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:10px}
+.prm{background:rgba(255,59,48,.9);color:#fff}.pdl{background:rgba(255,255,255,.95);color:var(--blue)}
+.pv-add{border:1.5px dashed var(--sep);border-radius:var(--rx);aspect-ratio:1;display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--card);transition:all .12s;position:relative;color:var(--t3);font-size:20px}
+.pv-add:hover{border-color:var(--accent);background:var(--accent-l);color:var(--accent)}
+.pv-add input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 
 /* tags */
 .tw{display:flex;flex-wrap:wrap;gap:5px;align-items:center;background:var(--card);border:1px solid var(--sep);border-radius:var(--rx);padding:6px 9px;cursor:text;transition:border-color .12s,box-shadow .12s;box-shadow:var(--sh-sm);min-height:40px}
@@ -383,26 +390,15 @@ select{cursor:pointer}select option{background:#fff}
       </div>
 
       <div class="fi">
-        <label>Bestand (afbeelding, video of PDF)</label>
+        <label>Bestanden (afbeelding, video of PDF)</label>
         <div id="uz" class="uz" ondragover="dOv(event)" ondragleave="dLv(event)" ondrop="dDp(event)">
-          <input type="file" accept="image/*,video/*,application/pdf" onchange="hImg(event)"/>
+          <input type="file" accept="image/*,video/*,application/pdf" multiple onchange="hImg(event)"/>
           <div style="font-size:22px;margin-bottom:5px;opacity:.25">📎</div>
           <p>Sleep hierheen of <b>klik om te uploaden</b></p>
-          <small>Afbeelding, video (MP4/MOV) of PDF</small>
+          <small>Meerdere bestanden toegestaan · Afbeelding, video of PDF</small>
         </div>
-        <div id="pvBox" style="display:none" class="pv">
-          <img id="pvImg" src="" alt="" style="display:none">
-          <video id="pvVid" src="" controls style="display:none;width:100%;height:100%;object-fit:cover"></video>
-          <div id="pvPdf" style="display:none;width:100%;height:100%;background:var(--bg);display:none;align-items:center;justify-content:center;flex-direction:column;gap:8px">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="4" y="2" width="20" height="26" rx="3" stroke="#FF3B30" stroke-width="1.5"/><path d="M4 10h20M10 2v8" stroke="#FF3B30" stroke-width="1.5" stroke-linecap="round"/><path d="M10 17h8M10 21h5" stroke="#FF3B30" stroke-width="1.5" stroke-linecap="round"/></svg>
-            <span id="pvPdfName" style="font-size:11px;font-weight:600;color:var(--t2);text-align:center;padding:0 8px;word-break:break-all"></span>
-          </div>
-          <div class="pv-btns">
-            <button class="pdl" onclick="dlImg()" title="Downloaden">
-              <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v6M3 5l2.5 2.5L8 5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 9h9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-            </button>
-            <button class="prm" onclick="rmImg()">✕</button>
-          </div>
+        <div id="pvGrid" style="display:none">
+          <div class="pv-grid" id="pvItems"></div>
         </div>
       </div>
 
@@ -440,7 +436,7 @@ select{cursor:pointer}select option{background:#fff}
 
 <script>
 // ── STATE ──
-let clients=[],posts={},aid=null,filt='all',view='grid',eid=null,tags=[],img=null,imgName=null,imgFileType=null,cal=new Date(),postType='organic',checked={},viewDate=new Date();
+let clients=[],posts={},aid=null,filt='all',view='grid',eid=null,tags=[],files=[],cal=new Date(),postType='organic',checked={},viewDate=new Date();
 const COLS=['#1DC9A4','#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#F7B731','#9B59B6','#E67E22','#2ECC71','#3498DB'];
 const SNL={draft:'Concept',scheduled:'Gepland',published:'Gepubliceerd'};
 const SCL={draft:'s-draft',scheduled:'s-scheduled',published:'s-published'};
@@ -583,23 +579,37 @@ function typeLabel(t){return t==='ad'?'Advertentie':'Organisch'}
 function typeCls(t){return t==='ad'?'tb-ad':'tb-org'}
 function typeSmall(t){return t==='ad'?'todo-type tb-ad':'todo-type tb-org'}
 
+function getPostFiles(p){
+  if(p.imgFiles&&p.imgFiles.length)return p.imgFiles;
+  if(p.imgData)return[{data:p.imgData,name:p.imgName||'bestand',fileType:p.fileType||'image'}];
+  return[];
+}
+
 function fileThumb(p){
-  if(!p.imgData) return `<div class="ve"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="2" width="18" height="18" rx="3" stroke="#C7C7CC" stroke-width="1.4"/><circle cx="7.5" cy="8.5" r="1.5" fill="#C7C7CC"/><path d="M2 15l5-4 4 4 2.5-2.5 6.5 6" stroke="#C7C7CC" stroke-width="1.4" stroke-linecap="round"/></svg></div>`;
-  if(p.fileType==='pdf') return `<div class="ve"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="1" width="14" height="18" rx="2" stroke="#FF3B30" stroke-width="1.4"/><path d="M2 7h14M6 1v6" stroke="#FF3B30" stroke-width="1.4" stroke-linecap="round"/><path d="M6 12h6M6 15h4" stroke="#FF3B30" stroke-width="1.4" stroke-linecap="round"/></svg></div>`;
-  if(p.fileType==='video') return `<div class="ve" style="background:#000;border-radius:inherit;width:100%;height:100%;"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" style="opacity:.6"><circle cx="11" cy="11" r="9" stroke="#fff" stroke-width="1.4"/><path d="M9 8l6 3-6 3V8z" fill="#fff"/></svg></div>`;
-  return `<img src="${p.imgData}" alt="">`;
+  const pf=getPostFiles(p);
+  if(!pf.length) return `<div class="ve"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="2" width="18" height="18" rx="3" stroke="#C7C7CC" stroke-width="1.4"/><circle cx="7.5" cy="8.5" r="1.5" fill="#C7C7CC"/><path d="M2 15l5-4 4 4 2.5-2.5 6.5 6" stroke="#C7C7CC" stroke-width="1.4" stroke-linecap="round"/></svg></div>`;
+  const first=pf[0];
+  let thumb='';
+  if(first.fileType==='pdf') thumb=`<div class="ve"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="1" width="14" height="18" rx="2" stroke="#FF3B30" stroke-width="1.4"/><path d="M2 7h14M6 1v6" stroke="#FF3B30" stroke-width="1.4" stroke-linecap="round"/><path d="M6 12h6M6 15h4" stroke="#FF3B30" stroke-width="1.4" stroke-linecap="round"/></svg></div>`;
+  else if(first.fileType==='video') thumb=`<div class="ve" style="background:#000;border-radius:inherit;width:100%;height:100%;"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" style="opacity:.6"><circle cx="11" cy="11" r="9" stroke="#fff" stroke-width="1.4"/><path d="M9 8l6 3-6 3V8z" fill="#fff"/></svg></div>`;
+  else thumb=`<img src="${first.data}" alt="">`;
+  const badge=pf.length>1?`<div style="position:absolute;bottom:3px;left:3px;background:rgba(0,0,0,.55);color:#fff;border-radius:4px;font-size:9px;font-weight:700;padding:1px 5px;">+${pf.length-1}</div>`:'';
+  return thumb+badge;
 }
 
 function todoThumb(p){
-  if(!p.imgData) return '📎';
-  if(p.fileType==='pdf') return '<svg width="20" height="20" viewBox="0 0 22 22" fill="none"><rect x="2" y="1" width="14" height="18" rx="2" stroke="#FF3B30" stroke-width="1.4"/><path d="M2 7h14M6 1v6" stroke="#FF3B30" stroke-width="1.4" stroke-linecap="round"/></svg>';
-  if(p.fileType==='video') return '<svg width="20" height="20" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="9" stroke="#6D6D72" stroke-width="1.4"/><path d="M9 8l6 3-6 3V8z" fill="#6D6D72"/></svg>';
-  return `<img src="${p.imgData}" alt="">`;
+  const pf=getPostFiles(p);
+  if(!pf.length) return '📎';
+  const first=pf[0];
+  if(first.fileType==='pdf') return '<svg width="20" height="20" viewBox="0 0 22 22" fill="none"><rect x="2" y="1" width="14" height="18" rx="2" stroke="#FF3B30" stroke-width="1.4"/><path d="M2 7h14M6 1v6" stroke="#FF3B30" stroke-width="1.4" stroke-linecap="round"/></svg>';
+  if(first.fileType==='video') return '<svg width="20" height="20" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="9" stroke="#6D6D72" stroke-width="1.4"/><path d="M9 8l6 3-6 3V8z" fill="#6D6D72"/></svg>';
+  return `<img src="${first.data}" alt="">`;
 }
 
 function cCard(p){
+  const hasFile=getPostFiles(p).length>0;
   const dt=p.date?new Date(p.date).toLocaleDateString('nl-NL',{day:'numeric',month:'short'}):'—';
-  const dlBtn=p.imgData?`<button class="dl-btn" onclick="dlImgCard('${p.id}')" title="Downloaden"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1v5.5M3 5l2 2 2-2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 8.5h8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>`:'';
+  const dlBtn=hasFile?`<button class="dl-btn" onclick="dlImgCard('${p.id}')" title="Downloaden"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1v5.5M3 5l2 2 2-2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 8.5h8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>`:'';
   return`<div class="card">
     <div class="cv">${fileThumb(p)}<div class="pi">${p.platform.slice(0,2).toUpperCase()}</div></div>
     <div class="cb">
@@ -623,7 +633,8 @@ function cCard(p){
 function cList(p){
   const vis=fileThumb(p);
   const dt=p.date?new Date(p.date).toLocaleDateString('nl-NL',{day:'numeric',month:'short',year:'numeric'}):'—';
-  const dlBtn=p.imgData?`<button class="ib" onclick="dlImgCard('${p.id}')" title="Downloaden"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1v5.5M3 5l2 2 2-2" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 8.5h8" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg></button>`:'';
+  const hasFile=getPostFiles(p).length>0;
+  const dlBtn=hasFile?`<button class="ib" onclick="dlImgCard('${p.id}')" title="Downloaden"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1v5.5M3 5l2 2 2-2" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 8.5h8" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg></button>`:'';
   return`<div class="li">
     <div class="lt">${vis}</div>
     <div class="lb">
@@ -714,7 +725,7 @@ function rToday(){
       const ck=tk+'_'+p.id;
       const isDone=!!checked[ck];
       const thumb=todoThumb(p);
-      const dlBtn=p.imgData?`<button class="todo-dl" onclick="dlTodo('${p.id}','${c.id}')" title="Downloaden"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v7M3.5 6l2.5 2.5L8.5 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 10.5h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>`:'';
+      const dlBtn=getPostFiles(p).length?`<button class="todo-dl" onclick="dlTodo('${p.id}','${c.id}')" title="Downloaden"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v7M3.5 6l2.5 2.5L8.5 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 10.5h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>`:'';
       html+=`<div class="todo${isDone?' done':''}" id="todo_${ck.replace(/[^a-z0-9]/gi,'_')}">
         <div class="chk${isDone?' on':''}" onclick="toggleTodo('${ck}')">
           ${isDone?'<svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}
@@ -777,7 +788,7 @@ function setType(t){
 }
 
 function openPM(){
-  eid=null;tags=[];img=null;imgName=null;
+  eid=null;tags=[];files=[];
   setType('organic');
   document.getElementById('pmTitle').textContent='Nieuwe post';
   document.getElementById('pCap').value='';
@@ -792,7 +803,11 @@ function openPM(){
 
 function editP(id){
   const p=(posts[aid]||[]).find(x=>x.id===id);if(!p)return;
-  eid=id;tags=[...(p.hashtags||[])];img=p.imgData||null;imgName=p.imgName||null;imgFileType=p.fileType||null;
+  eid=id;tags=[...(p.hashtags||[])];
+  // backward compat: old posts have imgData, new have imgFiles array
+  if(p.imgFiles&&p.imgFiles.length){files=[...p.imgFiles]}
+  else if(p.imgData){files=[{data:p.imgData,name:p.imgName||'bestand',fileType:p.fileType||'image'}]}
+  else{files=[]}
   setType(p.postType||'organic');
   document.getElementById('pmTitle').textContent='Post bewerken';
   document.getElementById('pCap').value=p.caption||'';
@@ -800,7 +815,7 @@ function editP(id){
   document.getElementById('pSt').value=p.status||'draft';
   document.getElementById('pDt').value=p.date||'';
   document.getElementById('pTm').value=p.time||'09:00';
-  rTags();img?shPv(img,imgFileType,imgName):rImg();
+  rTags();rPv();
   document.getElementById('pm').style.display='flex';
 }
 
@@ -808,8 +823,8 @@ function closePM(){document.getElementById('pm').style.display='none'}
 
 function saveP(){
   const cap=document.getElementById('pCap').value.trim();
-  if(!cap&&!img)return document.getElementById('pCap').focus();
-  const d={caption:cap,platform:document.getElementById('pPl').value,status:document.getElementById('pSt').value,date:document.getElementById('pDt').value,time:document.getElementById('pTm').value,hashtags:[...tags],imgData:img,imgName:imgName,fileType:imgFileType,postType};
+  if(!cap&&!files.length)return document.getElementById('pCap').focus();
+  const d={caption:cap,platform:document.getElementById('pPl').value,status:document.getElementById('pSt').value,date:document.getElementById('pDt').value,time:document.getElementById('pTm').value,hashtags:[...tags],imgFiles:[...files],imgData:files[0]?.data||null,imgName:files[0]?.name||null,fileType:files[0]?.fileType||null,postType};
   if(!posts[aid])posts[aid]=[];
   if(eid){const i=posts[aid].findIndex(p=>p.id===eid);if(i>-1)posts[aid][i]={...posts[aid][i],...d}}
   else{posts[aid].push({id:'p'+Date.now(),...d})}
@@ -823,69 +838,101 @@ function delP(id){
 }
 
 // ── FILE UPLOAD ──
-function hImg(ev){const f=ev.target.files[0];if(f){imgName=f.name;rf(f)}}
+function getFileType(f){
+  if(f.type.startsWith('video/'))return'video';
+  if(f.type==='application/pdf')return'pdf';
+  return'image';
+}
+
+function hImg(ev){
+  const newFiles=Array.from(ev.target.files);
+  readFiles(newFiles);
+  ev.target.value=''; // reset so same file can be re-added
+}
+
 function dOv(ev){ev.preventDefault();document.getElementById('uz').classList.add('over')}
 function dLv(){document.getElementById('uz').classList.remove('over')}
 function dDp(ev){
   ev.preventDefault();dLv();
-  const f=ev.dataTransfer.files[0];
-  if(f&&(f.type.startsWith('image/')||f.type.startsWith('video/')||f.type==='application/pdf')){imgName=f.name;rf(f)}
+  const newFiles=Array.from(ev.dataTransfer.files).filter(f=>f.type.startsWith('image/')||f.type.startsWith('video/')||f.type==='application/pdf');
+  readFiles(newFiles);
 }
-function rf(f){
-  const r=new FileReader();
-  r.onload=ev=>{
-    img=ev.target.result;
-    if(f.type.startsWith('video/'))imgFileType='video';
-    else if(f.type==='application/pdf')imgFileType='pdf';
-    else imgFileType='image';
-    shPv(img,imgFileType,f.name);
-  };
-  r.readAsDataURL(f);
+
+function readFiles(newFiles){
+  if(!newFiles.length)return;
+  let done=0;
+  newFiles.forEach(f=>{
+    const r=new FileReader();
+    r.onload=ev=>{
+      files.push({data:ev.target.result,name:f.name,fileType:getFileType(f)});
+      done++;
+      if(done===newFiles.length)rPv();
+    };
+    r.readAsDataURL(f);
+  });
 }
-function shPv(d,type,name){
-  document.getElementById('uz').style.display='none';
-  document.getElementById('pvBox').style.display='block';
-  const pvImg=document.getElementById('pvImg');
-  const pvVid=document.getElementById('pvVid');
-  const pvPdf=document.getElementById('pvPdf');
-  pvImg.style.display='none';pvVid.style.display='none';pvPdf.style.display='none';
-  if(type==='video'){pvVid.src=d;pvVid.style.display='block'}
-  else if(type==='pdf'){pvPdf.style.display='flex';document.getElementById('pvPdfName').textContent=name||'document.pdf'}
-  else{pvImg.src=d;pvImg.style.display='block'}
-}
+
 function rImg(){
-  img=null;imgName=null;imgFileType=null;
+  files=[];
   document.getElementById('uz').style.display='block';
-  document.getElementById('pvBox').style.display='none';
-  document.getElementById('pvImg').src='';
-  document.getElementById('pvVid').src='';
+  document.getElementById('pvGrid').style.display='none';
+  document.getElementById('pvItems').innerHTML='';
 }
-function rmImg(){img=null;imgName=null;imgFileType=null;rImg()}
 
-// download from modal preview
-function dlImg(){
-  if(!img)return;
+function rmFile(idx){
+  files.splice(idx,1);
+  rPv();
+}
+
+function dlFile(idx){
+  const f=files[idx];if(!f)return;
   const a=document.createElement('a');
-  a.href=img;a.download=imgName||'visual.png';a.click();
+  a.href=f.data;a.download=f.name||'bestand';a.click();
 }
 
-// download from card
+function rPv(){
+  if(!files.length){rImg();return}
+  document.getElementById('uz').style.display='none';
+  document.getElementById('pvGrid').style.display='block';
+  document.getElementById('pvItems').innerHTML=files.map((f,i)=>{
+    let preview='';
+    if(f.fileType==='video'){
+      preview=`<video src="${f.data}" style="width:100%;height:100%;object-fit:cover"></video>`;
+    }else if(f.fileType==='pdf'){
+      preview=`<div class="pv-item-pdf"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="1" width="14" height="20" rx="2" stroke="#FF3B30" stroke-width="1.3"/><path d="M3 7h14M7 1v6" stroke="#FF3B30" stroke-width="1.3" stroke-linecap="round"/><path d="M7 13h6M7 16h4" stroke="#FF3B30" stroke-width="1.3" stroke-linecap="round"/></svg><span>${e(f.name)}</span></div>`;
+    }else{
+      preview=`<img src="${f.data}" alt="">`;
+    }
+    return`<div class="pv-item">
+      ${preview}
+      <div class="pv-item-overlay">
+        <button class="pdl" onclick="dlFile(${i})" title="Download"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M4.5 1v5M2.5 4.5l2 2 2-2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 8h7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+        <button class="prm" onclick="rmFile(${i})">✕</button>
+      </div>
+    </div>`;
+  }).join('')+`<div class="pv-add" title="Meer toevoegen"><input type="file" accept="image/*,video/*,application/pdf" multiple onchange="hImg(event)"/>+</div>`;
+}
+
+// download first file from modal
+function dlImg(){if(files.length)dlFile(0)}
+
+// download from card (first file)
 function dlImgCard(postId){
   const all=Object.values(posts).flat();
   const p=all.find(x=>x.id===postId);
-  if(!p?.imgData)return;
-  const a=document.createElement('a');
-  a.href=p.imgData;a.download=p.imgName||'visual.png';a.click();
-  toast('Visual gedownload');
+  const f=p?.imgFiles?.[0]||{data:p?.imgData,name:p?.imgName};
+  if(!f?.data)return;
+  const a=document.createElement('a');a.href=f.data;a.download=f.name||'bestand';a.click();
+  toast('Bestand gedownload');
 }
 
 // download from today view
 function dlTodo(postId,clientId){
   const p=(posts[clientId]||[]).find(x=>x.id===postId);
-  if(!p?.imgData)return;
-  const a=document.createElement('a');
-  a.href=p.imgData;a.download=p.imgName||'visual.png';a.click();
-  toast('Visual gedownload');
+  const f=p?.imgFiles?.[0]||{data:p?.imgData,name:p?.imgName};
+  if(!f?.data)return;
+  const a=document.createElement('a');a.href=f.data;a.download=f.name||'bestand';a.click();
+  toast('Bestand gedownload');
 }
 
 // ── TAGS ──
