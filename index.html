@@ -96,6 +96,93 @@ body{font-family:'Manrope',sans-serif;color:var(--text);display:flex}
 .ib{width:26px;height:26px;border-radius:7px;border:none;background:var(--bg);color:var(--t2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s}
 .ib:hover{background:var(--accent-l);color:var(--accent)}
 .ib.del:hover{background:#FFF0EF;color:var(--red)}
+
+/* ── PLATFORM LOGOS ── */
+.pl-badge{position:absolute;bottom:3px;right:3px;width:18px;height:18px;border-radius:5px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.pl-ig{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)}
+.pl-li{background:#0A66C2}
+.pl-fb{background:#1877F2}
+.pl-tw{background:#000}
+.pl-tt{background:#000}
+
+/* ── PLATFORM PREVIEW MODAL ── */
+.prev-ov{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:1100;backdrop-filter:blur(12px)}
+.prev-mo{background:var(--bg);border-radius:20px;width:420px;max-width:calc(100vw - 24px);max-height:92vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,.25)}
+.prev-tabs{display:flex;padding:10px 12px 0;gap:4px;background:var(--card);border-bottom:1px solid var(--sep);overflow-x:auto}
+.prev-tabs::-webkit-scrollbar{height:0}
+.prev-tab{flex-shrink:0;display:flex;align-items:center;gap:5px;padding:7px 12px;border-radius:8px 8px 0 0;border:none;background:transparent;font-size:12px;font-weight:600;font-family:'Manrope',sans-serif;cursor:pointer;color:var(--t2);transition:all .12s;border-bottom:2px solid transparent}
+.prev-tab.on{color:var(--text);border-bottom-color:var(--accent);background:var(--bg)}
+.prev-tab svg{flex-shrink:0}
+.prev-content{flex:1;overflow-y:auto;padding:16px}
+.prev-content::-webkit-scrollbar{width:4px}
+.prev-content::-webkit-scrollbar-thumb{background:rgba(0,0,0,.1);border-radius:2px}
+.prev-close{position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;border:none;background:rgba(0,0,0,.08);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--t2);z-index:10}
+.prev-close:hover{background:rgba(0,0,0,.14)}
+.prev-head{position:relative}
+
+/* Instagram mockup */
+.ig-mock{background:#fff;border-radius:12px;overflow:hidden;box-shadow:var(--sh)}
+.ig-top{display:flex;align-items:center;gap:9px;padding:10px 12px}
+.ig-av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);flex-shrink:0}
+.ig-user{font-size:12px;font-weight:700;color:#000}
+.ig-more{margin-left:auto;font-size:18px;color:#555;line-height:1}
+.ig-img{width:100%;aspect-ratio:1;background:var(--bg);overflow:hidden}
+.ig-img img{width:100%;height:100%;object-fit:cover}
+.ig-img-empty{width:100%;aspect-ratio:1;background:#f0f0f0;display:flex;align-items:center;justify-content:center;color:#ccc;font-size:32px}
+.ig-actions{display:flex;align-items:center;gap:14px;padding:10px 12px 6px}
+.ig-caption{padding:0 12px 12px;font-size:12px;color:#000;line-height:1.4}
+.ig-caption b{font-weight:700}
+.ig-tags{color:#00376B;margin-top:2px;font-size:12px}
+
+/* LinkedIn mockup */
+.li-mock{background:#fff;border-radius:8px;overflow:hidden;box-shadow:var(--sh)}
+.li-top{display:flex;align-items:flex-start;gap:10px;padding:12px 14px 8px}
+.li-av{width:40px;height:40px;border-radius:50%;background:#0A66C2;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700}
+.li-user{font-size:13px;font-weight:700;color:#000}
+.li-sub{font-size:11px;color:#666;margin-top:1px}
+.li-caption{padding:0 14px 10px;font-size:13px;color:#000;line-height:1.5}
+.li-img{width:100%;aspect-ratio:1.91;background:var(--bg);overflow:hidden}
+.li-img img{width:100%;height:100%;object-fit:cover}
+.li-actions{display:flex;gap:0;border-top:1px solid #e0e0e0;padding:4px 8px}
+.li-act{flex:1;padding:8px;text-align:center;font-size:11px;color:#666;font-weight:600;cursor:pointer}
+
+/* Facebook mockup */
+.fb-mock{background:#fff;border-radius:8px;overflow:hidden;box-shadow:var(--sh)}
+.fb-top{display:flex;align-items:center;gap:9px;padding:12px 12px 8px}
+.fb-av{width:36px;height:36px;border-radius:50%;background:#1877F2;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px}
+.fb-user{font-size:13px;font-weight:700;color:#050505}
+.fb-time{font-size:11px;color:#65676B;display:flex;align-items:center;gap:3px}
+.fb-caption{padding:0 12px 10px;font-size:14px;color:#050505;line-height:1.4}
+.fb-img{width:100%;aspect-ratio:1.91;background:var(--bg);overflow:hidden}
+.fb-img img{width:100%;height:100%;object-fit:cover}
+.fb-reactions{padding:8px 12px;font-size:12px;color:#65676B;border-bottom:1px solid #e4e6eb;display:flex;justify-content:space-between}
+.fb-actions{display:flex;gap:0;padding:4px 8px}
+.fb-act{flex:1;padding:7px;text-align:center;font-size:12px;color:#65676B;font-weight:600;cursor:pointer;border-radius:4px}
+.fb-act:hover{background:#f0f2f5}
+
+/* Twitter/X mockup */
+.tw-mock{background:#000;border-radius:12px;overflow:hidden;box-shadow:var(--sh)}
+.tw-top{display:flex;gap:10px;padding:14px 14px 0}
+.tw-av{width:38px;height:38px;border-radius:50%;background:#333;flex-shrink:0}
+.tw-user{font-size:14px;font-weight:700;color:#fff}
+.tw-handle{font-size:13px;color:#71767b}
+.tw-body{padding:4px 14px 10px 62px;font-size:14px;color:#fff;line-height:1.5}
+.tw-img{margin:0 14px 12px;border-radius:14px;overflow:hidden;aspect-ratio:16/9;background:#1a1a1a}
+.tw-img img{width:100%;height:100%;object-fit:cover}
+.tw-actions{display:flex;padding:6px 14px 14px 62px;gap:18px}
+.tw-act{font-size:13px;color:#71767b;display:flex;align-items:center;gap:5px;cursor:pointer}
+
+/* TikTok mockup */
+.tt-mock{background:#000;border-radius:12px;overflow:hidden;box-shadow:var(--sh);position:relative}
+.tt-vid{width:100%;aspect-ratio:9/16;background:#111;display:flex;align-items:center;justify-content:center;overflow:hidden;max-height:480px}
+.tt-vid img{width:100%;height:100%;object-fit:cover}
+.tt-overlay{position:absolute;bottom:0;left:0;right:0;padding:16px 14px;background:linear-gradient(transparent,rgba(0,0,0,.7))}
+.tt-user{font-size:13px;font-weight:700;color:#fff;margin-bottom:4px}
+.tt-cap{font-size:12px;color:#fff;line-height:1.4;opacity:.9}
+.tt-side{position:absolute;right:10px;bottom:80px;display:flex;flex-direction:column;gap:16px;align-items:center}
+.tt-side-btn{display:flex;flex-direction:column;align-items:center;gap:3px;color:#fff;font-size:10px;cursor:pointer}
+
+.prev-info{font-size:11px;color:var(--t3);text-align:center;padding:8px 0 0;font-style:italic}
 .lv{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden}
 .li{display:flex;align-items:center;gap:11px;padding:11px 14px;border-bottom:1px solid var(--sep);transition:background .12s}
 .li:last-child{border-bottom:none}.li:hover{background:var(--bg)}
@@ -365,6 +452,17 @@ select{cursor:pointer}select option{background:#fff}
   </div>
 </div>
 
+<!-- PREVIEW MODAL -->
+<div class="prev-ov" id="prevModal" style="display:none" onclick="if(event.target===this)closePrev()">
+  <div class="prev-mo">
+    <div class="prev-head">
+      <button class="prev-close" onclick="closePrev()">✕</button>
+      <div class="prev-tabs" id="prevTabs"></div>
+    </div>
+    <div class="prev-content" id="prevContent"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast">
   <div class="tck"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
   <span id="tmsg"></span>
@@ -571,12 +669,23 @@ function typeLabel(t){return t==='ad'?'Advertentie':'Organisch'}
 function typeCls(t){return t==='ad'?'tb-ad':'tb-org'}
 function typeSmall(t){return t==='ad'?'todo-type tb-ad':'todo-type tb-org'}
 
+// ── PLATFORM LOGOS ──
+function plLogo(platform){
+  const p=platform.toLowerCase();
+  if(p.includes('instagram'))return`<div class="pl-badge pl-ig"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="6" stroke="white" stroke-width="2"/><circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="white"/></svg></div>`;
+  if(p.includes('linkedin'))return`<div class="pl-badge pl-li"><svg width="11" height="11" viewBox="0 0 24 24" fill="white"><path d="M6.5 8a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM5 10h3v9H5v-9zm5.5 0H13v1.3c.4-.7 1.3-1.5 2.8-1.5 3 0 3.5 2 3.5 4.5V19h-3v-4.2c0-1 0-2.3-1.4-2.3-1.5 0-1.7 1.1-1.7 2.2V19h-3V10z"/></svg></div>`;
+  if(p.includes('facebook'))return`<div class="pl-badge pl-fb"><svg width="11" height="11" viewBox="0 0 24 24" fill="white"><path d="M13 10h3l-.5 3H13v8h-3v-8H8v-3h2V8.5C10 6.6 11.1 5 13.5 5H16v3h-1.5c-.8 0-1.5.3-1.5 1v1z"/></svg></div>`;
+  if(p.includes('twitter')||p.includes('x'))return`<div class="pl-badge pl-tw"><svg width="10" height="10" viewBox="0 0 24 24" fill="white"><path d="M18.2 2h3.2l-7 8 8.2 10.8h-6.4l-4.7-6.2-5.4 6.2H2.9l7.5-8.6L2 2h6.6l4.3 5.7L18.2 2z"/></svg></div>`;
+  if(p.includes('tiktok'))return`<div class="pl-badge pl-tt"><svg width="11" height="11" viewBox="0 0 24 24" fill="white"><path d="M19.6 8.8A5.8 5.8 0 0115.8 7V16a5.8 5.8 0 11-5.8-5.8c.3 0 .6 0 .8.1V13a2.8 2.8 0 101.8 2.7V2h3a5.8 5.8 0 003.8 5.2l.2 1.6z"/></svg></div>`;
+  return`<div class="pl-badge" style="background:#666;font-size:7px;color:#fff;font-weight:800">${platform.slice(0,2).toUpperCase()}</div>`;
+}
+
 function cCard(p){
   const hasFile=getPostFiles(p).length>0;
   const dt=p.date?new Date(p.date).toLocaleDateString('nl-NL',{day:'numeric',month:'short'}):'—';
   const dlBtn=hasFile?`<button class="dl-btn" onclick="dlFromPost('${p.id}')" title="Downloaden"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1v5.5M3 5l2 2 2-2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 8.5h8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>`:'';
   return`<div class="card">
-    <div class="cv">${fileThumb(p)}<div class="pi">${p.platform.slice(0,2).toUpperCase()}</div></div>
+    <div class="cv">${fileThumb(p)}${plLogo(p.platform)}</div>
     <div class="cb">
       <div class="card-top">
         <span class="card-status ${SCL[p.status]}">${SNL[p.status]}</span>
@@ -587,6 +696,7 @@ function cCard(p){
         <div class="cdate"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><rect x=".5" y="1" width="8" height="7.5" rx="1.5" stroke="#AEAEB2" stroke-width="1" fill="none"/><path d="M.5 3.5h8M2.5 1v1M6.5 1v1" stroke="#AEAEB2" stroke-width="1" stroke-linecap="round"/></svg>${dt}${p.time?' · '+p.time:''}</div>
         <div class="cbtns">
           ${dlBtn}
+          <button class="ib" onclick="openPrev('${p.id}')" title="Preview"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 5s1.5-3 4-3 4 3 4 3-1.5 3-4 3-4-3-4-3z" stroke="currentColor" stroke-width="1.1"/><circle cx="5" cy="5" r="1.3" stroke="currentColor" stroke-width="1.1"/></svg></button>
           <button class="ib" onclick="editP('${p.id}')"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M7 1.5l1.5 1.5-5.5 5.5H1.5v-2L7 1.5z" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           <button class="ib del" onclick="delP('${p.id}')"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 3h7M3.5 3V2h3v1M2.5 3l.5 5.5h4.5L8 3" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></svg></button>
         </div>
@@ -604,7 +714,7 @@ function cList(p){
     <div class="lt">${vis}</div>
     <div class="lb">
       <div class="lc">${p.caption?e(p.caption):'(geen caption)'}</div>
-      <div class="lm"><span>${p.platform}</span><span>${dt}${p.time?' · '+p.time:''}</span><span class="lb-type ${typeCls(p.postType)}">${typeLabel(p.postType)}</span></div>
+      <div class="lm"><span style="display:flex;align-items:center;gap:4px">${plLogo(p.platform)}<span>${p.platform}</span></span><span>${dt}${p.time?' · '+p.time:''}</span><span class="lb-type ${typeCls(p.postType)}">${typeLabel(p.postType)}</span></div>
     </div>
     ${p.hashtags?.length?`<div class="ltags">${p.hashtags.slice(0,2).join(' ')}</div>`:''}
     <div class="lr">
@@ -966,7 +1076,148 @@ function dlFromPost(postId,clientId){
   dlFromUrl(f.url,f.name);
 }
 
-// ── TAGS ──
+// ── PLATFORM PREVIEW ──
+const PLATFORMS_PREV=[
+  {key:'instagram',label:'Instagram',tabColor:'#E1306C'},
+  {key:'linkedin',label:'LinkedIn',tabColor:'#0A66C2'},
+  {key:'facebook',label:'Facebook',tabColor:'#1877F2'},
+  {key:'twitter',label:'Twitter/X',tabColor:'#000'},
+  {key:'tiktok',label:'TikTok',tabColor:'#000'},
+];
+
+let prevPost=null;
+
+function openPrev(postId){
+  const all=Object.values(posts).flat();
+  const p=all.find(x=>x.id===postId);
+  if(!p)return;
+  prevPost=p;
+  const pl=p.platform.toLowerCase();
+  // find best matching tab
+  let startTab='instagram';
+  if(pl.includes('linkedin'))startTab='linkedin';
+  else if(pl.includes('facebook'))startTab='facebook';
+  else if(pl.includes('twitter')||pl.includes('x'))startTab='twitter';
+  else if(pl.includes('tiktok'))startTab='tiktok';
+  renderPrevTabs(startTab);
+  document.getElementById('prevModal').style.display='flex';
+}
+
+function closePrev(){document.getElementById('prevModal').style.display='none';prevPost=null}
+
+function renderPrevTabs(active){
+  const logos={
+    instagram:`<svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="6" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg>`,
+    linkedin:`<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6.5 8a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM5 10h3v9H5v-9zm5.5 0H13v1.3c.4-.7 1.3-1.5 2.8-1.5 3 0 3.5 2 3.5 4.5V19h-3v-4.2c0-1 0-2.3-1.4-2.3-1.5 0-1.7 1.1-1.7 2.2V19h-3V10z"/></svg>`,
+    facebook:`<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M13 10h3l-.5 3H13v8h-3v-8H8v-3h2V8.5C10 6.6 11.1 5 13.5 5H16v3h-1.5c-.8 0-1.5.3-1.5 1v1z"/></svg>`,
+    twitter:`<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.2 2h3.2l-7 8 8.2 10.8h-6.4l-4.7-6.2-5.4 6.2H2.9l7.5-8.6L2 2h6.6l4.3 5.7L18.2 2z"/></svg>`,
+    tiktok:`<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M19.6 8.8A5.8 5.8 0 0115.8 7V16a5.8 5.8 0 11-5.8-5.8c.3 0 .6 0 .8.1V13a2.8 2.8 0 101.8 2.7V2h3a5.8 5.8 0 003.8 5.2l.2 1.6z"/></svg>`,
+  };
+  document.getElementById('prevTabs').innerHTML=PLATFORMS_PREV.map(pl=>`
+    <button class="prev-tab${active===pl.key?' on':''}" onclick="renderPrevTabs('${pl.key}')" style="${active===pl.key?'color:'+pl.tabColor+';border-bottom-color:'+pl.tabColor:''}">
+      ${logos[pl.key]||''}${pl.label}
+    </button>`).join('');
+  renderPrevContent(active);
+}
+
+function renderPrevContent(platform){
+  const p=prevPost;if(!p)return;
+  const src=getPostFiles(p)[0]?.url||getPostFiles(p)[0]?.data||'';
+  const cap=p.caption||'';
+  const tags=(p.hashtags||[]).join(' ');
+  const clientName=clients.find(c=>c.id===p.clientId)?.name||'Searchflow';
+  const shortName=clientName.split(' ')[0];
+  let html='';
+
+  if(platform==='instagram'){
+    const imgHtml=src?`<img src="${src}" alt="">`:'<div style="width:100%;aspect-ratio:1;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:32px;color:#ccc">🖼</div>';
+    html=`<div class="ig-mock">
+      <div class="ig-top">
+        <div class="ig-av"></div>
+        <div><div class="ig-user">${e(shortName.toLowerCase())}</div></div>
+        <div class="ig-more">···</div>
+      </div>
+      <div class="ig-img">${imgHtml}</div>
+      <div class="ig-actions">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="#262626" stroke-width="1.8"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style="margin-left:2px"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z" stroke="#262626" stroke-width="1.8"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style="margin-left:2px"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="#262626" stroke-width="1.8"/></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style="margin-left:auto"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" stroke="#262626" stroke-width="1.8"/></svg>
+      </div>
+      ${cap?`<div class="ig-caption"><b>${e(shortName.toLowerCase())}</b> ${e(cap)}${tags?`<div class="ig-tags">${e(tags)}</div>`:''}</div>`:''}
+    </div>
+    <p class="prev-info">Instagram Feed · 1080×1080px</p>`;
+  }else if(platform==='linkedin'){
+    const imgHtml=src?`<img src="${src}" alt="">`:`<div style="width:100%;aspect-ratio:1.91;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:32px;color:#ccc">🖼</div>`;
+    html=`<div class="li-mock">
+      <div class="li-top">
+        <div class="li-av">${shortName[0]?.toUpperCase()}</div>
+        <div><div class="li-user">${e(clientName)}</div><div class="li-sub">Bedrijfspagina · Nu</div></div>
+      </div>
+      ${cap?`<div class="li-caption">${e(cap)}${tags?`<br><span style="color:#0A66C2">${e(tags)}</span>`:''}</div>`:''}
+      <div class="li-img">${imgHtml}</div>
+      <div class="li-actions">
+        <div class="li-act">👍 Vind ik leuk</div>
+        <div class="li-act">💬 Reageren</div>
+        <div class="li-act">🔁 Delen</div>
+      </div>
+    </div>
+    <p class="prev-info">LinkedIn Post · 1200×627px</p>`;
+  }else if(platform==='facebook'){
+    const imgHtml=src?`<img src="${src}" alt="">`:`<div style="width:100%;aspect-ratio:1.91;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:32px;color:#ccc">🖼</div>`;
+    html=`<div class="fb-mock">
+      <div class="fb-top">
+        <div class="fb-av">${shortName[0]?.toUpperCase()}</div>
+        <div><div class="fb-user">${e(clientName)}</div><div class="fb-time"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#65676B" stroke-width="1.2"/><path d="M6 3.5v2.5l2 1" stroke="#65676B" stroke-width="1.2" stroke-linecap="round"/></svg> Zojuist</div></div>
+      </div>
+      ${cap?`<div class="fb-caption">${e(cap)}${tags?`<br><span style="color:#1877F2">${e(tags)}</span>`:''}</div>`:''}
+      <div class="fb-img">${imgHtml}</div>
+      <div class="fb-reactions"><span>👍 Vind ik leuk</span><span>Reageren · Delen</span></div>
+      <div class="fb-actions">
+        <div class="fb-act">👍 Leuk</div>
+        <div class="fb-act">💬 Reageer</div>
+        <div class="fb-act">↗ Deel</div>
+      </div>
+    </div>
+    <p class="prev-info">Facebook Post · 1200×630px</p>`;
+  }else if(platform==='twitter'){
+    const imgHtml=src?`<img src="${src}" alt="">`:`<div style="width:100%;aspect-ratio:16/9;background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:32px;color:#555">🖼</div>`;
+    html=`<div class="tw-mock">
+      <div class="tw-top">
+        <div class="tw-av"></div>
+        <div><div class="tw-user">${e(clientName)}</div><div class="tw-handle">@${shortName.toLowerCase()}</div></div>
+      </div>
+      ${cap?`<div class="tw-body">${e(cap)}${tags?`<br><span style="color:#1d9bf0">${e(tags)}</span>`:''}</div>`:''}
+      <div class="tw-img">${imgHtml}</div>
+      <div class="tw-actions">
+        <div class="tw-act"><svg width="16" height="16" viewBox="0 0 24 24" fill="#71767b"><path d="M1.751 10c0-4.42 3.584-8 8.005-8h4.366c4.49 0 7.501 3.58 7.501 7.99 0 4.41-3.01 7.99-7.501 7.99H12.7c-.73 0-1.45-.2-2.09-.56l-3.63 1.06a.8.8 0 01-1-.97l.97-3.47A7.96 7.96 0 011.751 10zm8.005-6a6 6 0 00-6 6c0 1.58.59 3.05 1.63 4.17a.8.8 0 01.18.8L4.7 17.38l2.7-.79a.8.8 0 01.61.07c.52.3 1.11.46 1.72.46h4.37c3.36 0 5.5-2.7 5.5-5.99 0-3.3-2.14-5.99-5.5-5.99H9.756z"/></svg> 24</div>
+        <div class="tw-act"><svg width="16" height="16" viewBox="0 0 24 24" fill="#71767b"><path d="M4.5 3.88l4.432 4.14-1.364 1.46L5.5 7.55v8.45h10.427l-2.068-1.93 1.364-1.46 4.432 4.14-4.432 4.14-1.364-1.46 2.068-1.93H3.5V7.55L1.068 9.48-.368 8.02 4.5 3.88zm15 16.24l-4.432-4.14 1.364-1.46 2.068 1.93V8h-10.5l2.068 1.93-1.364 1.46L4.272 7.25l4.432-4.14 1.364 1.46L7.998 6.5H20.5V16.45l2.432-1.93 1.436 1.46-4.868 4.14z"/></svg> 180</div>
+        <div class="tw-act"><svg width="16" height="16" viewBox="0 0 24 24" fill="#71767b"><path d="M16.697 5.5c-1.222-.06-2.679.51-3.89 2.16l-.805 1.09-.806-1.09C9.984 6.01 8.526 5.44 7.304 5.5c-1.243.07-2.349.78-2.91 1.91-.552 1.12-.633 2.78.479 4.82 1.074 1.97 3.257 4.27 7.129 6.61 3.87-2.34 6.052-4.64 7.126-6.61 1.111-2.04 1.03-3.7.477-4.82-.561-1.13-1.666-1.84-2.908-1.91zm4.187 7.69c-1.351 2.48-4.001 5.12-8.379 7.67l-.503.3-.504-.3c-4.379-2.55-7.029-5.19-8.382-7.67-1.36-2.5-1.41-4.86-.514-6.67.887-1.79 2.647-2.91 4.601-3.01 1.651-.09 3.368.56 4.798 2.01 1.429-1.45 3.146-2.1 4.796-2.01 1.954.1 3.714 1.22 4.601 3.01.896 1.81.846 4.17-.514 6.67z"/></svg> 847</div>
+        <div class="tw-act"><svg width="16" height="16" viewBox="0 0 24 24" fill="#71767b"><path d="M8.75 21V3h2v18h-2zM18 21V8.5h2V21h-2zM4 21l.004-10h2L6 21H4zm9.248 0v-7h2v7h-2z"/></svg> 12K</div>
+      </div>
+    </div>
+    <p class="prev-info">Twitter/X Post · 1200×675px</p>`;
+  }else if(platform==='tiktok'){
+    const imgHtml=src?`<img src="${src}" alt="">`:`<div style="width:100%;height:100%;background:#111;display:flex;align-items:center;justify-content:center;font-size:48px;color:#555">🎬</div>`;
+    html=`<div class="tt-mock">
+      <div class="tt-vid">${imgHtml}</div>
+      <div class="tt-overlay">
+        <div class="tt-user">@${shortName.toLowerCase()}</div>
+        ${cap?`<div class="tt-cap">${e(cap)}${tags?` ${e(tags)}`:''}</div>`:''}
+      </div>
+      <div class="tt-side">
+        <div class="tt-side-btn"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg><span>24.8K</span></div>
+        <div class="tt-side-btn"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>847</span></div>
+        <div class="tt-side-btn"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg><span>Delen</span></div>
+      </div>
+    </div>
+    <p class="prev-info">TikTok Video · 1080×1920px (9:16)</p>`;
+  }
+
+  document.getElementById('prevContent').innerHTML=html;
+}
+
+function closePrev(){document.getElementById('prevModal').style.display='none';prevPost=null}
 function hTag(ev){
   const inp=document.getElementById('ti');
   if((ev.key===' '||ev.key==='Enter')&&inp.value.trim()){
@@ -979,7 +1230,7 @@ function rTags(){const w=document.getElementById('tw'),inp=document.getElementBy
 // ── UTILS ──
 function toast(msg){const t=document.getElementById('toast');document.getElementById('tmsg').textContent=msg;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2400)}
 function e(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-document.addEventListener('keydown',ev=>{if(ev.key==='Escape'){closePM();document.getElementById('cm').style.display='none'}});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape'){closePM();closePrev();document.getElementById('cm').style.display='none'}});
 </script>
 </body>
 </html>
