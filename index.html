@@ -834,15 +834,32 @@ async function saveP(){
     const f=files[i];
     if(!f.isNew)continue;
     try{
-      const blob=await fetch(f.data).then(r=>r.blob());
-      const ext=f.name.split('.').pop().toLowerCase();
-      const safeName=Date.now()+'_'+Math.random().toString(36).slice(2,7)+'.'+ext;
-      const path=`${postId}/${safeName}`;
-      const{error:upErr}=await SB.storage.from('post-files').upload(path,blob,{contentType:blob.type,upsert:false});
-      if(upErr){console.error('upload error',upErr);continue}
+      // Convert base64 to blob more reliably
+      const base64=f.data.split(',')[1];
+      const mime=f.data.split(',')[0].split(':')[1].split(';')[0];
+      const byteChars=atob(base64);
+      const byteArr=new Uint8Array(byteChars.length);
+      for(let j=0;j<byteChars.length;j++)byteArr[j]=byteChars.charCodeAt(j);
+      const blob=new Blob([byteArr],{type:mime});
+
+      const ext=f.name.split('.').pop().toLowerCase()||'bin';
+      const path=`${postId}/${Date.now()}${i}.${ext}`;
+
+      console.log('Uploading to path:',path,'mime:',mime,'size:',blob.size);
+
+      const{data:upData,error:upErr}=await SB.storage.from('post-files').upload(path,blob,{contentType:mime,upsert:true});
+      if(upErr){
+        console.error('Upload error details:',JSON.stringify(upErr));
+        toast('Upload fout: '+upErr.message);
+        continue;
+      }
       const{data:{publicUrl}}=SB.storage.from('post-files').getPublicUrl(path);
+      console.log('Public URL:',publicUrl);
       await SB.from('post_files').insert({post_id:postId,file_name:f.name,file_type:f.fileType,storage_path:path,public_url:publicUrl,sort_order:i});
-    }catch(err){console.error('file upload failed',err)}
+    }catch(err){
+      console.error('File upload exception:',err);
+      toast('Fout: '+err.message);
+    }
   }
 
   // Update sort order for kept files
