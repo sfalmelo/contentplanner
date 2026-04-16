@@ -884,9 +884,10 @@ async function rToday(){
   area.innerHTML=html;
 }
 
-function goToPost(clientId,postId){
+async function goToPost(clientId,postId){
   switchNav('clients');
-  selC(clientId).then(()=>setTimeout(()=>editP(postId),80));
+  await selC(clientId);
+  editP(postId);
 }
 
 function toggleTodo(ck){
@@ -1257,7 +1258,6 @@ function openPrev(postId,clientId){
   };
   document.getElementById('prevPlatformLabel').innerHTML=`${logos[key]||''}<span>${PLATFORM_LABELS[key]||p.platform} preview</span>`;
 
-  // edit button in header
   document.getElementById('prevEditBtn').onclick=()=>{closePrev();goToPost(prevClientId,postId)};
 
   renderPrevContent(key);
@@ -1272,16 +1272,16 @@ function buildCarousel(files, aspectRatio){
   const slides=files.map(f=>{
     const src=f.url||f.data||'';
     let media='';
-    if(f.fileType==='video') media=`<video src="${src}" style="width:100%;aspect-ratio:${aspectRatio};object-fit:cover"></video>`;
-    else if(f.fileType==='pdf') media=`<div style="width:100%;aspect-ratio:${aspectRatio};background:#f5f5f5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="4" y="2" width="20" height="26" rx="3" stroke="#FF3B30" stroke-width="1.5"/><path d="M4 10h20M10 2v8" stroke="#FF3B30" stroke-width="1.5" stroke-linecap="round"/></svg><span style="font-size:11px;color:#999">${e(f.name||'PDF')}</span></div>`;
-    else if(src) media=`<img src="${src}" style="width:100%;aspect-ratio:${aspectRatio};object-fit:cover">`;
-    else media=`<div style="width:100%;aspect-ratio:${aspectRatio};background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:32px;color:#ccc">🖼</div>`;
-    return `<div class="carousel-slide">${media}</div>`;
+    if(f.fileType==='video') media=`<video src="${src}" style="width:100%;height:100%;object-fit:cover"></video>`;
+    else if(f.fileType==='pdf') media=`<div style="width:100%;height:100%;background:#f5f5f5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="4" y="2" width="20" height="26" rx="3" stroke="#FF3B30" stroke-width="1.5"/><path d="M4 10h20M10 2v8" stroke="#FF3B30" stroke-width="1.5" stroke-linecap="round"/></svg><span style="font-size:11px;color:#999">${e(f.name||'PDF')}</span></div>`;
+    else if(src) media=`<img src="${src}" style="width:100%;height:100%;object-fit:cover;display:block">`;
+    else media=`<div style="width:100%;height:100%;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:32px;color:#ccc">🖼</div>`;
+    return `<div class="carousel-slide" style="height:100%">${media}</div>`;
   }).join('');
   const dots=files.length>1?`<div class="carousel-dots">${files.map((_,i)=>`<button class="carousel-dot${i===0?' on':''}" onclick="cGo('${id}',${i})"></button>`).join('')}</div>`:'';
   const arrows=files.length>1?`<button class="carousel-arrow c-prev" onclick="cPrev('${id}')">‹</button><button class="carousel-arrow c-next" onclick="cNext('${id}')">›</button>`:'';
   const count=files.length>1?`<div class="carousel-count">1 / ${files.length}</div>`:'';
-  return `<div class="carousel" id="${id}" data-idx="0" data-total="${files.length}">${arrows}<div class="carousel-track">${slides}</div>${dots}${count}</div>`;
+  return `<div class="carousel" id="${id}" data-idx="0" data-total="${files.length}" style="aspect-ratio:${aspectRatio}">${arrows}<div class="carousel-track" style="height:100%">${slides}</div>${dots}${count}</div>`;
 }
 
 function cGo(id,idx){
