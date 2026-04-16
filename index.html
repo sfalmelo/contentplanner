@@ -1268,7 +1268,11 @@ function openPrev(postId,clientId){
   };
   document.getElementById('prevPlatformLabel').innerHTML=`${logos[key]||''}<span>${PLATFORM_LABELS[key]||p.platform} preview</span>`;
 
-  document.getElementById('prevEditBtn').onclick=()=>{closePrev();goToPost(prevClientId,postId)};
+  document.getElementById('prevEditBtn').onclick=()=>{
+    const pid=prevPost?.id;const cid=prevClientId;
+    closePrev();
+    goToPost(cid,pid);
+  };
 
   renderPrevContent(key);
   document.getElementById('prevModal').style.display='flex';
