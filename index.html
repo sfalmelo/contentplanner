@@ -835,7 +835,9 @@ async function saveP(){
     if(!f.isNew)continue;
     try{
       const blob=await fetch(f.data).then(r=>r.blob());
-      const path=`${postId}/${Date.now()}_${f.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;
+      const ext=f.name.split('.').pop().toLowerCase();
+      const safeName=Date.now()+'_'+Math.random().toString(36).slice(2,7)+'.'+ext;
+      const path=`${postId}/${safeName}`;
       const{error:upErr}=await SB.storage.from('post-files').upload(path,blob,{contentType:blob.type,upsert:false});
       if(upErr){console.error('upload error',upErr);continue}
       const{data:{publicUrl}}=SB.storage.from('post-files').getPublicUrl(path);
