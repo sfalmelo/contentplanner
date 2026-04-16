@@ -838,12 +838,17 @@ async function rToday(){
     return;
   }
 
-  // group by client
+  // group by client + cache in posts object
   const byClient={};
   rows.forEach(row=>{
     const cid=row.client_id;
+    const np=normPost(row);
     if(!byClient[cid])byClient[cid]={client:row.clients,posts:[]};
-    byClient[cid].posts.push(normPost(row));
+    byClient[cid].posts.push(np);
+    // cache so openPrev/editP can find the post
+    if(!posts[cid])posts[cid]=[];
+    const idx=posts[cid].findIndex(x=>x.id===np.id);
+    if(idx>=0)posts[cid][idx]=np; else posts[cid].push(np);
   });
 
   const pct=Math.round(done/total*100);
@@ -950,7 +955,12 @@ function openPM(){
 }
 
 function editP(id){
-  const p=(posts[aid]||[]).find(x=>x.id===id);if(!p)return;
+  // search in active client first, then all cached posts
+  let p=(posts[aid]||[]).find(x=>x.id===id);
+  if(!p) p=Object.values(posts).flat().find(x=>x.id===id);
+  if(!p)return;
+  // ensure aid matches the post's client
+  if(p.clientId&&p.clientId!==aid) aid=p.clientId;
   eid=id;tags=[...(p.hashtags||[])];
   files=(p.imgFiles||[]).map(f=>({...f,isNew:false}));
   setType(p.postType||'organic');
