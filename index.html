@@ -1223,8 +1223,6 @@ function copyCaption(){
 // ── PLATFORM PREVIEW ──
 const PLATFORM_LABELS={'instagram':'Instagram','linkedin':'LinkedIn','facebook':'Facebook','twitter':'Twitter/X','tiktok':'TikTok'};
 
-let prevPost=null,prevClientId=null;
-
 function openPrev(postId,clientId){
   const all=clientId?(posts[clientId]||[]):Object.values(posts).flat();
   const p=all.find(x=>x.id===postId);
@@ -1361,7 +1359,6 @@ function renderPrevContent(platform){
     <button class="detail-btn" id="prevCopyBtn" onclick="prevCopyCaption()"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="4" y="4" width="7.5" height="7.5" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 3V2a1 1 0 011-1h5.5A1.5 1.5 0 0112 2.5V9a1 1 0 01-1 1H10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg> Caption kopiëren</button>`;
 }
 
-function closePrev(){document.getElementById('prevModal').style.display='none';prevPost=null}
 function hTag(ev){
   const inp=document.getElementById('ti');
   if((ev.key===' '||ev.key==='Enter')&&inp.value.trim()){
