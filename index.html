@@ -731,12 +731,13 @@ function rToday(){
           ${isDone?'<svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}
         </div>
         <div class="todo-thumb">${thumb}</div>
-        <div class="todo-body">
+        <div class="todo-body" onclick="goToPost('${c.id}','${p.id}')" style="cursor:pointer" title="Naar post">
           <div class="todo-cap">${p.caption?e(p.caption):'(geen caption)'}</div>
           <div class="todo-meta">
             ${p.time?`<span class="todo-time">⏰ ${p.time}</span>`:''}
             <span class="todo-pl">${p.platform}</span>
             <span class="${typeSmall(p.postType)}">${typeLabel(p.postType)}</span>
+            <span style="font-size:10px;color:var(--accent);font-weight:600;margin-left:2px">→ bekijken</span>
           </div>
         </div>
         ${dlBtn}
@@ -745,6 +746,13 @@ function rToday(){
     html+='</div>';
   });
   area.innerHTML=html;
+}
+
+function goToPost(clientId,postId){
+  switchNav('clients');
+  selC(clientId);
+  // slight delay to let view render before opening modal
+  setTimeout(()=>editP(postId),80);
 }
 
 function toggleTodo(ck){
