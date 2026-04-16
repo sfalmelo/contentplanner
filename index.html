@@ -855,7 +855,9 @@ async function saveP(){
       }
       const{data:{publicUrl}}=SB.storage.from('post-files').getPublicUrl(path);
       console.log('Public URL:',publicUrl);
-      await SB.from('post_files').insert({post_id:postId,file_name:f.name,file_type:f.fileType,storage_path:path,public_url:publicUrl,sort_order:i});
+      const{error:pfErr}=await SB.from('post_files').insert({post_id:postId,file_name:f.name,file_type:f.fileType,storage_path:path,public_url:publicUrl,sort_order:i});
+      if(pfErr){console.error('post_files insert error:',JSON.stringify(pfErr));toast('DB fout: '+pfErr.message);}
+      else{console.log('post_files insert OK for post:',postId);}
     }catch(err){
       console.error('File upload exception:',err);
       toast('Fout: '+err.message);
@@ -869,6 +871,7 @@ async function saveP(){
 
   btn.disabled=false;btn.textContent='Opslaan';
   await loadPostsForClient(aid);
+  console.log('Posts after save:',JSON.stringify(posts[aid]?.map(p=>({id:p.id,files:p.imgFiles?.length}))));
   closePM();rStats();rC();updateTodayBadge();
   toast(eid?'Post bijgewerkt':'Post opgeslagen');
 }
