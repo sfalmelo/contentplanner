@@ -1299,10 +1299,18 @@ function openDetail(postId,clientId){
   document.getElementById('detailModal').style.display='flex';
 }
 
-function prevDlVisual(){
-  const f=getPostFiles(prevPost)[0];
-  if(!f?.url&&!f?.data)return;
-  dlFromUrl(f.url||f.data,f.name||'visual');
+async function prevDlVisual(){
+  const allFiles=getPostFiles(prevPost);
+  if(!allFiles.length)return;
+  for(let i=0;i<allFiles.length;i++){
+    const f=allFiles[i];
+    const src=f.url||f.data;
+    if(!src)continue;
+    await dlFromUrl(src,f.name||`visual_${i+1}`);
+    // kleine pauze tussen downloads zodat de browser ze niet blokkeert
+    if(i<allFiles.length-1)await new Promise(r=>setTimeout(r,400));
+  }
+  if(allFiles.length>1)toast(`${allFiles.length} bestanden gedownload`);
 }
 
 function prevCopyCaption(){
