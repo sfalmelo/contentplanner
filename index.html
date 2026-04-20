@@ -571,7 +571,7 @@ select{cursor:pointer}select option{background:#fff}
       </div>
       <div class="r2">
         <div class="fi"><label>Platform</label>
-          <select id="pPl"><option>Instagram</option><option>LinkedIn</option><option>Facebook</option><option>Twitter/X</option><option>TikTok</option></select>
+          <select id="pPl"><option>Instagram</option><option>LinkedIn</option><option>Facebook</option><option>Twitter/X</option><option>TikTok</option><option>YouTube</option></select>
         </div>
         <div class="fi"><label>Status</label>
           <select id="pSt"><option value="draft">Concept</option><option value="scheduled">Gepland</option><option value="published">Gepubliceerd</option></select>
@@ -910,6 +910,7 @@ function plLogo(platform){
   if(p.includes('facebook'))return`<div class="pl-badge pl-fb"><svg width="11" height="11" viewBox="0 0 24 24" fill="white"><path d="M13 10h3l-.5 3H13v8h-3v-8H8v-3h2V8.5C10 6.6 11.1 5 13.5 5H16v3h-1.5c-.8 0-1.5.3-1.5 1v1z"/></svg></div>`;
   if(p.includes('twitter')||p.includes('x'))return`<div class="pl-badge pl-tw"><svg width="10" height="10" viewBox="0 0 24 24" fill="white"><path d="M18.2 2h3.2l-7 8 8.2 10.8h-6.4l-4.7-6.2-5.4 6.2H2.9l7.5-8.6L2 2h6.6l4.3 5.7L18.2 2z"/></svg></div>`;
   if(p.includes('tiktok'))return`<div class="pl-badge pl-tt"><svg width="11" height="11" viewBox="0 0 24 24" fill="white"><path d="M19.6 8.8A5.8 5.8 0 0115.8 7V16a5.8 5.8 0 11-5.8-5.8c.3 0 .6 0 .8.1V13a2.8 2.8 0 101.8 2.7V2h3a5.8 5.8 0 003.8 5.2l.2 1.6z"/></svg></div>`;
+  if(p.includes('youtube'))return`<div class="pl-badge" style="background:#FF0000"><svg width="11" height="11" viewBox="0 0 24 24" fill="white"><path d="M23 7s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C16.2 2.8 12 2.8 12 2.8s-4.2 0-6.8.2c-.6.1-1.9.1-3 1.3C1.3 5 1 7 1 7S.7 9.1.7 11.2v2c0 2.1.3 4.2.3 4.2s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C7.2 21.6 12 21.6 12 21.6s4.2 0 6.8-.3c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.1.3-4.2v-2C23.3 9.1 23 7 23 7zm-13.5 8.5v-7.3l8.1 3.7-8.1 3.6z"/></svg></div>`;
   return`<div class="pl-badge" style="background:#666;font-size:7px;color:#fff;font-weight:800">${platform.slice(0,2).toUpperCase()}</div>`;
 }
 
@@ -1476,7 +1477,7 @@ function copyCaption(){
 }
 
 // ── PLATFORM PREVIEW ──
-const PLATFORM_LABELS={'instagram':'Instagram','linkedin':'LinkedIn','facebook':'Facebook','twitter':'Twitter/X','tiktok':'TikTok'};
+const PLATFORM_LABELS={'instagram':'Instagram','linkedin':'LinkedIn','facebook':'Facebook','twitter':'Twitter/X','tiktok':'TikTok','youtube':'YouTube'};
 
 function openPrev(postId,clientId){
   const all=clientId?(posts[clientId]||[]):Object.values(posts).flat();
@@ -1487,14 +1488,16 @@ function openPrev(postId,clientId){
   let key='instagram';
   if(pl.includes('linkedin'))key='linkedin';
   else if(pl.includes('facebook'))key='facebook';
-  else if(pl.includes('twitter')||pl.includes('x'))key='twitter';
+  else if(pl.includes('twitter')||pl.includes('/x'))key='twitter';
   else if(pl.includes('tiktok'))key='tiktok';
+  else if(pl.includes('youtube'))key='youtube';
   const logos={
     instagram:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="6" stroke="#E1306C" stroke-width="2"/><circle cx="12" cy="12" r="4.5" stroke="#E1306C" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="#E1306C"/></svg>`,
     linkedin:`<svg width="16" height="16" viewBox="0 0 24 24" fill="#0A66C2"><path d="M6.5 8a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM5 10h3v9H5v-9zm5.5 0H13v1.3c.4-.7 1.3-1.5 2.8-1.5 3 0 3.5 2 3.5 4.5V19h-3v-4.2c0-1 0-2.3-1.4-2.3-1.5 0-1.7 1.1-1.7 2.2V19h-3V10z"/></svg>`,
     facebook:`<svg width="16" height="16" viewBox="0 0 24 24" fill="#1877F2"><path d="M13 10h3l-.5 3H13v8h-3v-8H8v-3h2V8.5C10 6.6 11.1 5 13.5 5H16v3h-1.5c-.8 0-1.5.3-1.5 1v1z"/></svg>`,
     twitter:`<svg width="16" height="16" viewBox="0 0 24 24" fill="#000"><path d="M18.2 2h3.2l-7 8 8.2 10.8h-6.4l-4.7-6.2-5.4 6.2H2.9l7.5-8.6L2 2h6.6l4.3 5.7L18.2 2z"/></svg>`,
     tiktok:`<svg width="16" height="16" viewBox="0 0 24 24" fill="#000"><path d="M19.6 8.8A5.8 5.8 0 0115.8 7V16a5.8 5.8 0 11-5.8-5.8c.3 0 .6 0 .8.1V13a2.8 2.8 0 101.8 2.7V2h3a5.8 5.8 0 003.8 5.2l.2 1.6z"/></svg>`,
+    youtube:`<svg width="16" height="16" viewBox="0 0 24 24" fill="#FF0000"><path d="M23 7s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C16.2 2.8 12 2.8 12 2.8s-4.2 0-6.8.2c-.6.1-1.9.1-3 1.3C1.3 5 1 7 1 7S.7 9.1.7 11.2v2c0 2.1.3 4.2.3 4.2s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C7.2 21.6 12 21.6 12 21.6s4.2 0 6.8-.3c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.1.3-4.2v-2C23.3 9.1 23 7 23 7zm-13.5 8.5v-7.3l8.1 3.7-8.1 3.6z"/></svg>`,
   };
   document.getElementById('prevPlatformLabel').innerHTML=`${logos[key]||''}<span>${PLATFORM_LABELS[key]||p.platform} preview</span>`;
 
@@ -1564,12 +1567,15 @@ function renderPrevContent(platform){
   const p=prevPost;if(!p)return;
   const allFiles=getPostFiles(p);
   const cap=p.caption||'';
+  // preserve line breaks in caption
+  const capHtml=e(cap).replace(/\n/g,'<br>');
   const tags=(p.hashtags||[]).join(' ');
   const clientName=clients.find(c=>c.id===p.clientId)?.name||'Searchflow';
   const shortName=clientName.split(' ')[0];
   let html='';
 
   if(platform==='instagram'){
+    // Feed staand 4:5 is de beste keuze (1080×1350px)
     const img=buildCarousel(allFiles,'4/5');
     html=`<div class="ig-mock">
       <div class="ig-top">
@@ -1584,17 +1590,19 @@ function renderPrevContent(platform){
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style="margin-left:2px"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="#262626" stroke-width="1.8"/></svg>
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style="margin-left:auto"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" stroke="#262626" stroke-width="1.8"/></svg>
       </div>
-      ${cap?`<div class="ig-caption"><b>${e(shortName.toLowerCase())}</b> ${e(cap)}${tags?`<div class="ig-tags">${e(tags)}</div>`:''}</div>`:''}
+      ${capHtml?`<div class="ig-caption"><b>${e(shortName.toLowerCase())}</b> ${capHtml}${tags?`<div class="ig-tags">${e(tags)}</div>`:''}</div>`:''}
     </div>
-    <p class="prev-info">Instagram Feed · 4:5 (1080×1350px)</p>`;
+    <p class="prev-info">Instagram Feed (Staand) · 4:5 · 1080×1350px</p>`;
+
   }else if(platform==='linkedin'){
-    const img=buildCarousel(allFiles,'4/5');
+    // Afbeeldingen post: 1200×1200px (1:1) of 1080×1350px (4:5)
+    const img=buildCarousel(allFiles,'1/1');
     html=`<div class="li-mock">
       <div class="li-top">
         <div class="li-av">${shortName[0]?.toUpperCase()}</div>
         <div><div class="li-user">${e(clientName)}</div><div class="li-sub">Bedrijfspagina · Nu</div></div>
       </div>
-      ${cap?`<div class="li-caption">${e(cap)}${tags?`<br><span style="color:#0A66C2">${e(tags)}</span>`:''}</div>`:''}
+      ${capHtml?`<div class="li-caption">${capHtml}${tags?`<br><span style="color:#0A66C2">${e(tags)}</span>`:''}</div>`:''}
       ${img}
       <div class="li-actions">
         <div class="li-act">👍 Vind ik leuk</div>
@@ -1602,15 +1610,17 @@ function renderPrevContent(platform){
         <div class="li-act">🔁 Delen</div>
       </div>
     </div>
-    <p class="prev-info">LinkedIn Post · 4:5 of 1:1 (1080×1350px aanbevolen)</p>`;
+    <p class="prev-info">LinkedIn Post · 1:1 · 1200×1200px</p>`;
+
   }else if(platform==='facebook'){
+    // Feed staand 4:5 (1080×1350px)
     const img=buildCarousel(allFiles,'4/5');
     html=`<div class="fb-mock">
       <div class="fb-top">
         <div class="fb-av">${shortName[0]?.toUpperCase()}</div>
         <div><div class="fb-user">${e(clientName)}</div><div class="fb-time"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#65676B" stroke-width="1.2"/><path d="M6 3.5v2.5l2 1" stroke="#65676B" stroke-width="1.2" stroke-linecap="round"/></svg> Zojuist</div></div>
       </div>
-      ${cap?`<div class="fb-caption">${e(cap)}${tags?`<br><span style="color:#1877F2">${e(tags)}</span>`:''}</div>`:''}
+      ${capHtml?`<div class="fb-caption">${capHtml}${tags?`<br><span style="color:#1877F2">${e(tags)}</span>`:''}</div>`:''}
       ${img}
       <div class="fb-reactions"><span>👍 Vind ik leuk</span><span>Reageren · Delen</span></div>
       <div class="fb-actions">
@@ -1619,15 +1629,17 @@ function renderPrevContent(platform){
         <div class="fb-act">↗ Deel</div>
       </div>
     </div>
-    <p class="prev-info">Facebook Post · 4:5 of 1:1 (1080×1350px aanbevolen)</p>`;
+    <p class="prev-info">Facebook Feed (Staand) · 4:5 · 1080×1350px</p>`;
+
   }else if(platform==='twitter'){
+    // Twitter/X: 16:9 (1200×675px)
     const img=buildCarousel(allFiles,'16/9');
     html=`<div class="tw-mock">
       <div class="tw-top">
         <div class="tw-av"></div>
         <div><div class="tw-user">${e(clientName)}</div><div class="tw-handle">@${shortName.toLowerCase()}</div></div>
       </div>
-      ${cap?`<div class="tw-body">${e(cap)}${tags?`<br><span style="color:#1d9bf0">${e(tags)}</span>`:''}</div>`:''}
+      ${capHtml?`<div class="tw-body">${capHtml}${tags?`<br><span style="color:#1d9bf0">${e(tags)}</span>`:''}</div>`:''}
       <div style="margin:0 14px 12px;border-radius:14px;overflow:hidden">${img}</div>
       <div class="tw-actions">
         <div class="tw-act"><svg width="16" height="16" viewBox="0 0 24 24" fill="#71767b"><path d="M1.751 10c0-4.42 3.584-8 8.005-8h4.366c4.49 0 7.501 3.58 7.501 7.99 0 4.41-3.01 7.99-7.501 7.99H12.7c-.73 0-1.45-.2-2.09-.56l-3.63 1.06a.8.8 0 01-1-.97l.97-3.47A7.96 7.96 0 011.751 10z"/></svg> 24</div>
@@ -1635,14 +1647,16 @@ function renderPrevContent(platform){
         <div class="tw-act"><svg width="16" height="16" viewBox="0 0 24 24" fill="#71767b"><path d="M8.75 21V3h2v18h-2zM18 21V8.5h2V21h-2zM4 21l.004-10h2L6 21H4zm9.248 0v-7h2v7h-2z"/></svg> 12K</div>
       </div>
     </div>
-    <p class="prev-info">X (Twitter) Post · 16:9 (1200×675px)</p>`;
+    <p class="prev-info">X (Twitter) Post · 16:9 · 1200×675px</p>`;
+
   }else if(platform==='tiktok'){
+    // TikTok: 9:16 (1080×1920px)
     const img=buildCarousel(allFiles,'9/16');
     html=`<div class="tt-mock">
       ${img}
       <div class="tt-overlay">
         <div class="tt-user">@${shortName.toLowerCase()}</div>
-        ${cap?`<div class="tt-cap">${e(cap)}${tags?` ${e(tags)}`:''}</div>`:''}
+        ${capHtml?`<div class="tt-cap">${capHtml}${tags?` <span style="color:#69C9D0">${e(tags)}</span>`:''}</div>`:''}
       </div>
       <div class="tt-side">
         <div class="tt-side-btn"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg><span>24.8K</span></div>
@@ -1650,7 +1664,33 @@ function renderPrevContent(platform){
         <div class="tt-side-btn"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg><span>Delen</span></div>
       </div>
     </div>
-    <p class="prev-info">TikTok Video · 1080×1920px (9:16)</p>`;
+    <p class="prev-info">TikTok Video · 9:16 · 1080×1920px</p>`;
+
+  }else if(platform==='youtube'){
+    // YouTube Shorts: 9:16 (1080×1920px) / Thumbnail: 16:9 (1280×720px)
+    const img=buildCarousel(allFiles,'16/9');
+    const src=allFiles[0]?.url||allFiles[0]?.data||'';
+    html=`<div style="background:#0f0f0f;border-radius:12px;overflow:hidden;box-shadow:var(--sh)">
+      <!-- video thumbnail -->
+      <div style="position:relative">
+        ${img}
+        <div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.8);color:#fff;font-size:11px;font-weight:700;padding:2px 6px;border-radius:4px">0:30</div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none">
+          <div style="width:48px;height:48px;background:rgba(255,0,0,.9);border-radius:50%;display:flex;align-items:center;justify-content:center">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="white"><path d="M5 3l12 6-12 6V3z"/></svg>
+          </div>
+        </div>
+      </div>
+      <!-- info -->
+      <div style="display:flex;gap:10px;padding:12px 14px">
+        <div style="width:34px;height:34px;border-radius:50%;background:#FF0000;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700">${shortName[0]?.toUpperCase()}</div>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:#fff;line-height:1.3">${capHtml||'(geen titel)'}</div>
+          <div style="font-size:11px;color:#aaa;margin-top:4px">${e(clientName)} · 1,2K weergaven</div>
+        </div>
+      </div>
+    </div>
+    <p class="prev-info">YouTube Thumbnail · 16:9 · 1280×720px</p>`;
   }
 
   document.getElementById('prevContent').innerHTML=html;
