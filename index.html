@@ -229,34 +229,83 @@ body{font-family:'Manrope',sans-serif;color:var(--text);display:flex}
 .cdot{padding:2px 5px;border-radius:4px;font-size:9px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cdot.s-draft{background:#F2F2F7;color:var(--t2)}.cdot.s-scheduled{background:#FFF7E6;color:#b87000}.cdot.s-published{background:#EDFAF2;color:#1f8f3a}
 .cmore{font-size:9px;color:var(--t3)}
-.today-wrap{display:flex;flex-direction:column;gap:6px}
-.today-section{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;margin-bottom:10px}
-.tc-head{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--sep)}
-.tc-av{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
-.tc-name{font-size:13px;font-weight:700}
-.tc-count{font-size:11px;color:var(--t3);margin-left:auto}
-.todo{display:flex;align-items:center;gap:11px;padding:11px 14px;border-bottom:1px solid var(--sep);transition:background .12s}
-.todo:last-child{border-bottom:none}.todo:hover{background:var(--bg)}
-.todo.done{opacity:.45}
-.todo.done .todo-cap{text-decoration:line-through;color:var(--t3)}
-.chk{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--sep);background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
-.chk:hover{border-color:var(--accent)}.chk.on{background:var(--accent);border-color:var(--accent)}
-.todo-thumb{width:40px;height:40px;border-radius:8px;background:var(--bg);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:16px;opacity:.3}
-.todo-thumb img{width:100%;height:100%;object-fit:cover;opacity:1}
-.todo-body{flex:1;min-width:0}
-.todo-cap{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.todo-meta{display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap}
-.todo-time{font-size:11px;color:var(--t3);font-weight:500}
-.todo-pl{font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;background:var(--bg);color:var(--t2)}
-.todo-type{font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px}
-.todo-dl{width:28px;height:28px;border-radius:8px;border:none;background:var(--bg);color:var(--blue);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s;flex-shrink:0}
-.todo-dl:hover{background:#EEF5FF}
-.today-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:12px;text-align:center;background:var(--card);border-radius:var(--r);box-shadow:var(--sh)}
-.today-empty h3{font-size:16px;font-weight:700}.today-empty p{font-size:13px;color:var(--t2);line-height:1.5}
-.today-progress{display:flex;align-items:center;gap:10px;padding:10px 2px 14px}
-.prog-bar{flex:1;height:6px;background:var(--sep);border-radius:3px;overflow:hidden}
-.prog-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .3s}
-.prog-label{font-size:11px;font-weight:700;color:var(--t2);white-space:nowrap}
+/* ── TODAY / PLANNING VIEW ── */
+.plan-shell{display:flex;flex-direction:column;flex:1;overflow:hidden;background:var(--bg)}
+
+/* week strip */
+.week-strip{background:var(--card);border-bottom:1px solid var(--sep);padding:0 22px;display:flex;align-items:stretch;gap:0;overflow-x:auto;flex-shrink:0}
+.week-strip::-webkit-scrollbar{height:0}
+.week-day{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 14px;cursor:pointer;border-bottom:2px solid transparent;transition:all .13s;gap:3px;min-width:56px;flex-shrink:0}
+.week-day:hover{background:var(--bg)}
+.week-day.on{border-bottom-color:var(--accent)}
+.wd-name{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.6px}
+.wd-num{font-size:18px;font-weight:700;color:var(--t2);line-height:1}
+.wd-dot{width:5px;height:5px;border-radius:50%;margin-top:2px}
+.week-day.on .wd-name{color:var(--accent-d)}
+.week-day.on .wd-num{color:var(--accent)}
+.week-day.today .wd-num{background:var(--accent);color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:14px}
+
+/* plan header */
+.plan-head{padding:14px 22px 10px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.plan-date-label{font-size:20px;font-weight:700;letter-spacing:-.4px}
+.plan-date-label span{color:var(--accent)}
+.plan-meta{font-size:12px;color:var(--t2);margin-top:2px}
+.plan-head-right{display:flex;align-items:center;gap:8px}
+
+/* plan content */
+.plan-area{flex:1;overflow-y:auto;padding:0 22px 24px}
+.plan-area::-webkit-scrollbar{width:4px}
+.plan-area::-webkit-scrollbar-thumb{background:rgba(0,0,0,.1);border-radius:2px}
+
+/* summary bar */
+.plan-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;padding-top:4px}
+.plan-stat{background:var(--card);border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh-sm);display:flex;flex-direction:column;gap:3px}
+.plan-stat-val{font-size:22px;font-weight:700;line-height:1}
+.plan-stat-lbl{font-size:11px;color:var(--t3);font-weight:600}
+
+/* progress */
+.plan-prog-wrap{background:var(--card);border-radius:var(--r);padding:14px 18px;box-shadow:var(--sh-sm);margin-bottom:18px;display:flex;align-items:center;gap:14px}
+.plan-prog-bar{flex:1;height:8px;background:var(--sep);border-radius:4px;overflow:hidden}
+.plan-prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-d));border-radius:4px;transition:width .4s cubic-bezier(.4,0,.2,1)}
+.plan-prog-label{font-size:12px;font-weight:700;color:var(--t2);white-space:nowrap}
+.plan-prog-sub{font-size:11px;color:var(--t3);margin-top:1px}
+
+/* section header */
+.plan-section-head{display:flex;align-items:center;gap:8px;padding:6px 0 8px;margin-top:4px}
+.plan-section-av{width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0}
+.plan-section-name{font-size:13px;font-weight:700}
+.plan-section-cnt{font-size:11px;color:var(--t3);margin-left:auto;background:var(--bg);border-radius:10px;padding:1px 7px;font-weight:600}
+
+/* task row */
+.plan-task{background:var(--card);border-radius:10px;box-shadow:var(--sh-sm);margin-bottom:6px;display:flex;align-items:center;gap:12px;padding:10px 14px;transition:all .13s;cursor:pointer;border:1.5px solid transparent}
+.plan-task:hover{border-color:var(--sep);box-shadow:0 2px 12px rgba(0,0,0,.08);transform:translateX(2px)}
+.plan-task.done{opacity:.5}
+.plan-task.done .pt-title{text-decoration:line-through;color:var(--t3)}
+.pt-check{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--sep);background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.pt-check:hover{border-color:var(--accent)}
+.pt-check.on{background:var(--accent);border-color:var(--accent)}
+.pt-thumb{width:36px;height:36px;border-radius:8px;background:var(--bg);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--t3);position:relative}
+.pt-thumb img{width:100%;height:100%;object-fit:cover}
+.pt-body{flex:1;min-width:0}
+.pt-title{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3}
+.pt-meta{display:flex;align-items:center;gap:6px;margin-top:4px;flex-wrap:wrap}
+.pt-time{font-size:11px;color:var(--t3);font-weight:500;display:flex;align-items:center;gap:3px}
+.pt-platform{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--bg);color:var(--t2);display:flex;align-items:center;gap:4px}
+.pt-status{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px}
+.pt-type{font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px}
+.pt-actions{display:flex;gap:4px;flex-shrink:0}
+.pt-btn{width:26px;height:26px;border-radius:7px;border:none;background:transparent;color:var(--t3);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.pt-btn:hover{background:var(--accent-l);color:var(--accent)}
+
+/* empty state */
+.plan-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:14px;text-align:center}
+.plan-empty-ico{width:64px;height:64px;border-radius:18px;background:var(--card);box-shadow:var(--sh);display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:4px}
+.plan-empty h3{font-size:16px;font-weight:700;color:var(--text)}
+.plan-empty p{font-size:13px;color:var(--t3);line-height:1.5;max-width:220px}
+
+/* group by time label */
+.plan-time-label{font-size:11px;font-weight:700;color:var(--t3);letter-spacing:.5px;text-transform:uppercase;padding:12px 0 6px;display:flex;align-items:center;gap:8px}
+.plan-time-label::after{content:'';flex:1;height:1px;background:var(--sep)}
 /* ── POST DETAIL POPUP ── */
 .detail-ov{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:1200;backdrop-filter:blur(12px)}
 .detail-mo{background:var(--bg);border-radius:20px;width:400px;max-width:calc(100vw - 24px);max-height:92vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,.28)}
@@ -449,22 +498,21 @@ select{cursor:pointer}select option{background:#fff}
     </div>
     <div class="area" id="area"></div>
   </div>
+  <!-- planning view -->
   <div id="tv" style="display:none;flex-direction:column;flex:1;overflow:hidden">
-    <div class="top">
+    <!-- week strip -->
+    <div class="week-strip" id="weekStrip"></div>
+    <!-- plan header -->
+    <div class="plan-head">
       <div>
-        <h1>Taken voor <span id="todayDateLabel">vandaag</span></h1>
-        <div class="top-sub" id="todaySub"></div>
+        <div class="plan-date-label" id="todayDateLabel">Vandaag</div>
+        <div class="plan-meta" id="todaySub"></div>
       </div>
-      <div class="top-r">
-        <div class="seg">
-          <button class="seg-btn" onclick="chDay(-1)">‹ Vorige</button>
-          <button class="seg-btn on" id="btnToday" onclick="goToday()">Vandaag</button>
-          <button class="seg-btn" onclick="chDay(1)">Volgende ›</button>
-        </div>
+      <div class="plan-head-right">
         <input type="date" id="dayPicker" style="padding:6px 10px;font-size:12px;border-radius:var(--rx);border:1px solid var(--sep);background:var(--card);color:var(--text);font-family:Manrope,sans-serif;cursor:pointer;box-shadow:var(--sh-sm)" oninput="pickDay(this.value)"/>
       </div>
     </div>
-    <div class="area" id="todayArea"></div>
+    <div class="plan-area" id="todayArea"></div>
   </div>
 </div>
 
@@ -690,12 +738,40 @@ async function loadPostsForClient(clientId){
 function todayKey(){return new Date().toISOString().split('T')[0]}
 function viewKey(){return viewDate.toISOString().split('T')[0]}
 function isToday(){return viewKey()===todayKey()}
+
 function updateViewDateLabel(){
-  const label=isToday()?'vandaag':viewDate.toLocaleDateString('nl-NL',{weekday:'long',day:'numeric',month:'long'});
-  document.getElementById('todayDateLabel').textContent=label;
+  const d=viewDate;
+  const MONTHS_NL=['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+  const DAYS_NL=['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
+  const label=isToday()
+    ?`Vandaag — <span>${d.getDate()} ${MONTHS_NL[d.getMonth()]}</span>`
+    :`<span>${DAYS_NL[d.getDay()]}</span> ${d.getDate()} ${MONTHS_NL[d.getMonth()]}`;
+  document.getElementById('todayDateLabel').innerHTML=label;
   document.getElementById('dayPicker').value=viewKey();
-  document.getElementById('btnToday').classList.toggle('on',isToday());
+  renderWeekStrip();
 }
+
+function renderWeekStrip(){
+  const strip=document.getElementById('weekStrip');if(!strip)return;
+  const DAYS=['Ma','Di','Wo','Do','Vr','Za','Zo'];
+  const dayOfWeek=(viewDate.getDay()+6)%7;
+  const monday=new Date(viewDate);monday.setDate(viewDate.getDate()-dayOfWeek);
+  const todayStr=todayKey();const viewStr=viewKey();
+  let html='';
+  for(let i=0;i<7;i++){
+    const d=new Date(monday);d.setDate(monday.getDate()+i);
+    const dk=d.toISOString().split('T')[0];
+    const isV=dk===viewStr;const isT=dk===todayStr;
+    const cnt=Object.values(posts).flat().filter(p=>p.date===dk).length;
+    html+=`<div class="week-day${isV?' on':''}${isT?' today':''}" onclick="pickDay('${dk}')">
+      <div class="wd-name">${DAYS[i]}</div>
+      <div class="wd-num">${d.getDate()}</div>
+      <div class="wd-dot" style="background:${cnt>0?'var(--accent)':'transparent'}"></div>
+    </div>`;
+  }
+  strip.innerHTML=html;
+}
+
 function chDay(d){viewDate=new Date(viewDate);viewDate.setDate(viewDate.getDate()+d);updateViewDateLabel();rToday()}
 function goToday(){viewDate=new Date();updateViewDateLabel();rToday()}
 function pickDay(val){if(!val)return;viewDate=new Date(val+'T12:00:00');updateViewDateLabel();rToday()}
@@ -908,78 +984,130 @@ function rCal(area,all){
 }
 function chM(d){cal.setMonth(cal.getMonth()+d);rC()}
 
-// ── TODAY VIEW ──
+// ── TODAY / PLANNING VIEW ──
 async function rToday(){
   const area=document.getElementById('todayArea');
   const tk=viewKey();
-  area.innerHTML=`<div class="empty"><div class="empty-ico" style="font-size:20px">⏳</div><h3>Laden...</h3></div>`;
+  area.innerHTML=`<div class="plan-empty"><div class="plan-empty-ico">⏳</div><h3>Laden...</h3></div>`;
 
   const{data,error}=await SB.from('posts')
     .select('*, post_files(*), clients(id,name,color)')
     .eq('date',tk)
     .order('time',{ascending:true,nullsFirst:true});
 
-  if(error){area.innerHTML=`<div class="today-empty"><h3>Fout bij laden</h3><p>${error.message}</p></div>`;return}
+  if(error){area.innerHTML=`<div class="plan-empty"><div class="plan-empty-ico">⚠️</div><h3>Fout bij laden</h3><p>${error.message}</p></div>`;return}
 
   const rows=data||[];
   const total=rows.length;
   const done=rows.filter(r=>checked[tk+'_'+r.id]).length;
-  document.getElementById('todaySub').textContent=total?`${done} van ${total} afgerond`:'Geen posts ingepland';
+  const pct=total?Math.round(done/total*100):0;
 
-  if(!total){
-    const msg=isToday()?'Er staan geen posts ingepland voor vandaag.':'Er staan geen posts ingepland op deze datum.';
-    area.innerHTML=`<div class="today-empty"><div style="font-size:44px;opacity:.15">📅</div><h3>${isToday()?'Niets te doen!':'Dag vrij'}</h3><p>${msg}</p></div>`;
-    return;
-  }
+  document.getElementById('todaySub').textContent=total
+    ?`${total} post${total!==1?'s':''} · ${done} afgerond`
+    :'Geen posts ingepland';
 
-  // group by client + cache in posts object
+  // cache + group
   const byClient={};
   rows.forEach(row=>{
-    const cid=row.client_id;
-    const np=normPost(row);
+    const cid=row.client_id;const np=normPost(row);
     if(!byClient[cid])byClient[cid]={client:row.clients,posts:[]};
     byClient[cid].posts.push(np);
-    // cache so openPrev/editP can find the post
     if(!posts[cid])posts[cid]=[];
     const idx=posts[cid].findIndex(x=>x.id===np.id);
     if(idx>=0)posts[cid][idx]=np; else posts[cid].push(np);
   });
+  renderWeekStrip();
 
-  const pct=Math.round(done/total*100);
-  let html=`<div class="today-progress"><div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div><span class="prog-label">${pct}% klaar</span></div>`;
+  if(!total){
+    area.innerHTML=`<div class="plan-empty">
+      <div class="plan-empty-ico">${isToday()?'🎉':'📅'}</div>
+      <h3>${isToday()?'Vrije dag!':'Niets gepland'}</h3>
+      <p>${isToday()?'Geen posts ingepland voor vandaag.':'Geen posts ingepland op deze datum.'}</p>
+    </div>`;
+    return;
+  }
+
+  // stats
+  const nDraft=rows.filter(r=>r.status==='draft').length;
+  const nSched=rows.filter(r=>r.status==='scheduled').length;
+  const nPub=rows.filter(r=>r.status==='published').length;
+
+  let html=`
+  <div class="plan-summary">
+    <div class="plan-stat"><div class="plan-stat-val" style="color:var(--t2)">${nDraft}</div><div class="plan-stat-lbl">Concept</div></div>
+    <div class="plan-stat"><div class="plan-stat-val" style="color:var(--orange)">${nSched}</div><div class="plan-stat-lbl">Gepland</div></div>
+    <div class="plan-stat"><div class="plan-stat-val" style="color:var(--green)">${nPub}</div><div class="plan-stat-lbl">Gepubliceerd</div></div>
+  </div>
+  <div class="plan-prog-wrap">
+    <div>
+      <div class="plan-prog-bar"><div class="plan-prog-fill" style="width:${pct}%"></div></div>
+      <div class="plan-prog-sub">${done} van ${total} afgerond</div>
+    </div>
+    <div class="plan-prog-label">${pct}%</div>
+  </div>`;
 
   Object.values(byClient).forEach(({client:c,posts:ps})=>{
     if(!c)return;
     const ini=c.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
     const cDone=ps.filter(p=>checked[tk+'_'+p.id]).length;
-    html+=`<div class="today-section"><div class="tc-head"><div class="tc-av" style="background:${c.color}1A;color:${c.color}">${ini}</div><span class="tc-name">${e(c.name)}</span><span class="tc-count">${cDone}/${ps.length}</span></div>`;
-    ps.forEach(p=>{
+
+    html+=`<div class="plan-section-head">
+      <div class="plan-section-av" style="background:${c.color}1A;color:${c.color}">${ini}</div>
+      <span class="plan-section-name">${e(c.name)}</span>
+      <span class="plan-section-cnt">${cDone}/${ps.length}</span>
+    </div>`;
+
+    // group by time bucket
+    const noTime=ps.filter(p=>!p.time);
+    const withTime=ps.filter(p=>!!p.time);
+
+    const renderTask=(p)=>{
       const ck=tk+'_'+p.id;
       const isDone=!!checked[ck];
-      const thumb=todoThumb(p);
-      const hasFile=getPostFiles(p).length>0;
-      const dlBtn=hasFile?`<button class="todo-dl" onclick="dlFromPost('${p.id}','${c.id}')" title="Download"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v7M3.5 6l2.5 2.5L8.5 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 10.5h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>`:'';
-      const prevBtn=`<button class="todo-dl" onclick="openPrev('${p.id}','${c.id}')" title="Preview"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 6s2-4 5-4 5 4 5 4-2 4-5 4-5-4-5-4z" stroke="currentColor" stroke-width="1.3"/><circle cx="6" cy="6" r="1.5" stroke="currentColor" stroke-width="1.3"/></svg></button>`;
-      html+=`<div class="todo${isDone?' done':''}" id="todo_${ck.replace(/[^a-z0-9]/gi,'_')}">
-        <div class="chk${isDone?' on':''}" onclick="toggleTodo('${ck}')">
-          ${isDone?'<svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}
+      const pf=getPostFiles(p);
+      const src=pf[0]?.url||pf[0]?.data||'';
+      const hasFile=pf.length>0;
+      let thumbHtml='';
+      if(src){
+        if(pf[0].fileType==='video')thumbHtml=`<div style="width:100%;height:100%;background:#000;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="#fff" stroke-width="1.2"/><path d="M6 5l4 2-4 2V5z" fill="#fff"/></svg></div>`;
+        else if(pf[0].fileType==='pdf')thumbHtml=`<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="1" width="9" height="13" rx="1.5" stroke="#FF3B30" stroke-width="1.2"/><path d="M2 5h9M4 1v4" stroke="#FF3B30" stroke-width="1.2" stroke-linecap="round"/></svg>`;
+        else thumbHtml=`<img src="${src}" alt="">`;
+      }else{
+        thumbHtml=`<svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="opacity:.25"><rect x="1" y="1" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.2"/><circle cx="5" cy="6" r="1.5" fill="currentColor"/><path d="M1 11l4-3 3 3 2-2 5 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>`;
+      }
+      const multiCount=pf.length>1?`<div style="position:absolute;bottom:1px;right:1px;background:rgba(0,0,0,.6);color:#fff;font-size:7px;font-weight:700;border-radius:3px;padding:0 3px;line-height:14px">${pf.length}</div>`:'';
+
+      return`<div class="plan-task${isDone?' done':''}" id="ptask_${ck.replace(/[^a-z0-9]/gi,'_')}">
+        <div class="pt-check${isDone?' on':''}" onclick="event.stopPropagation();toggleTodo('${ck}')">
+          ${isDone?`<svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 4.5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`:''}
         </div>
-        <div class="todo-thumb">${thumb}</div>
-        <div class="todo-body" onclick="openPrev('${p.id}','${c.id}')" style="cursor:pointer" title="Bekijken">
-          <div class="todo-cap">${p.caption?e(p.caption):'(geen caption)'}</div>
-          <div class="todo-meta">
-            ${p.time?`<span class="todo-time">⏰ ${p.time}</span>`:''}
-            <span class="todo-pl">${p.platform}</span>
-            <span class="${typeSmall(p.postType)}">${typeLabel(p.postType)}</span>
-            <span style="font-size:10px;color:var(--accent);font-weight:600">→ bekijken</span>
+        <div class="pt-thumb">${thumbHtml}${multiCount}</div>
+        <div class="pt-body" onclick="openPrev('${p.id}','${c.id}')">
+          <div class="pt-title">${p.caption?e(p.caption):'(geen caption)'}</div>
+          <div class="pt-meta">
+            ${p.time?`<span class="pt-time"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><circle cx="4.5" cy="4.5" r="3.5" stroke="currentColor" stroke-width="1"/><path d="M4.5 2.5v2l1.5 1" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>${p.time}</span>`:''}
+            <span class="pt-platform">${plLogo(p.platform)}<span>${p.platform}</span></span>
+            <span class="pt-status ${SCL[p.status]}">${SNL[p.status]}</span>
+            <span class="pt-type ${typeCls(p.postType)}">${typeLabel(p.postType)}</span>
           </div>
         </div>
-        ${prevBtn}
-        ${dlBtn}
+        <div class="pt-actions" onclick="event.stopPropagation()">
+          <button class="pt-btn" onclick="openPrev('${p.id}','${c.id}')" title="Bekijken"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 6s2-3.5 5-3.5S11 6 11 6s-2 3.5-5 3.5S1 6 1 6z" stroke="currentColor" stroke-width="1.2"/><circle cx="6" cy="6" r="1.5" stroke="currentColor" stroke-width="1.2"/></svg></button>
+          ${hasFile?`<button class="pt-btn" onclick="dlFromPost('${p.id}','${c.id}')" title="Download"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v7M3.5 6l2.5 2.5L8.5 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 10.5h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>`:''}
+        </div>
       </div>`;
-    });
-    html+='</div>';
+    };
+
+    if(withTime.length){
+      html+=`<div class="plan-time-label">Ingepland</div>`;
+      withTime.forEach(p=>{ html+=renderTask(p); });
+    }
+    if(noTime.length){
+      html+=`<div class="plan-time-label">${withTime.length?'Geen tijdstip':'Taken'}</div>`;
+      noTime.forEach(p=>{ html+=renderTask(p); });
+    }
   });
+
   area.innerHTML=html;
 }
 
