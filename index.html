@@ -17,6 +17,27 @@
 }
 html,body{height:100%;overflow:hidden;background:var(--bg)}
 body{font-family:'Manrope',sans-serif;color:var(--text);display:flex}
+
+/* ── LOGIN SCREEN ── */
+.login-ov{position:fixed;inset:0;background:linear-gradient(135deg,#0f1117 0%,#1a1f2e 50%,#0d1a14 100%);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:0}
+.login-box{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:36px 32px;width:360px;max-width:calc(100vw - 32px);backdrop-filter:blur(20px);box-shadow:0 24px 64px rgba(0,0,0,.4)}
+.login-logo{margin-bottom:28px;display:flex;align-items:center;gap:10px}
+.login-logo svg text{font-family:'Manrope',sans-serif}
+.login-title{font-size:22px;font-weight:700;color:#fff;margin-bottom:6px;letter-spacing:-.4px}
+.login-sub{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:28px}
+.login-fi{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.login-fi label{font-size:11px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.4px;text-transform:uppercase}
+.login-fi input{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 14px;font-size:14px;font-family:'Manrope',sans-serif;color:#fff;outline:none;transition:border-color .15s,background .15s;width:100%}
+.login-fi input::placeholder{color:rgba(255,255,255,.25)}
+.login-fi input:focus{border-color:var(--accent);background:rgba(255,255,255,.1)}
+.login-err{font-size:12px;color:#ff6b6b;min-height:18px;margin-bottom:4px;display:flex;align-items:center;gap:5px}
+.login-btn{width:100%;padding:12px;background:var(--accent);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:700;font-family:'Manrope',sans-serif;cursor:pointer;transition:background .15s;margin-top:4px;display:flex;align-items:center;justify-content:center;gap:8px}
+.login-btn:hover{background:var(--accent-d)}
+.login-btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* ── LOGOUT ── */
+.btn-logout{width:100%;padding:7px 12px;background:transparent;border:1px solid var(--sep);border-radius:var(--rx);color:var(--t3);font-size:12px;font-weight:600;font-family:'Manrope',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .12s;margin-top:6px}
+.btn-logout:hover{border-color:var(--red);color:var(--red);background:#fff5f5}
 .sb{width:252px;min-width:252px;background:var(--card);border-right:1px solid var(--sep);display:flex;flex-direction:column;height:100vh;overflow:hidden}
 .sb-head{padding:18px 14px 8px}
 .logo{margin-bottom:12px}
@@ -334,6 +355,33 @@ select{cursor:pointer}select option{background:#fff}
 </head>
 <body>
 
+<!-- LOGIN SCREEN -->
+<div class="login-ov" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">
+      <svg width="120" height="24" viewBox="0 0 120 24" fill="none">
+        <text x="0" y="19" font-family="Manrope,sans-serif" font-size="18" font-weight="700" fill="#ffffff" letter-spacing="-0.4">search</text>
+        <text x="64" y="19" font-family="Manrope,sans-serif" font-size="18" font-weight="700" fill="#1DC9A4" letter-spacing="-0.4">flow</text>
+      </svg>
+    </div>
+    <div class="login-title">Welkom terug</div>
+    <div class="login-sub">Log in om verder te gaan</div>
+    <div class="login-fi">
+      <label>E-mailadres</label>
+      <input type="email" id="loginEmail" placeholder="jouw@email.nl" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <div class="login-fi">
+      <label>Wachtwoord</label>
+      <input type="password" id="loginPw" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <div class="login-err" id="loginErr"></div>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 7h7M9 5l3 2-3 2" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 2H3a1 1 0 00-1 1v8a1 1 0 001 1h4" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Inloggen
+    </button>
+  </div>
+</div>
+
 <div class="sb">
   <div class="sb-head">
     <div class="sb-search">
@@ -358,6 +406,10 @@ select{cursor:pointer}select option{background:#fff}
     <button class="btn-add" onclick="openCM()">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
       Klant toevoegen
+    </button>
+    <button class="btn-logout" onclick="doLogout()">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M5 6H1M3 4l-2 2 2 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 2h3a1 1 0 011 1v6a1 1 0 01-1 1H7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      Uitloggen
     </button>
   </div>
 </div>
@@ -563,8 +615,50 @@ function normPost(row){
   };
 }
 
+// ── AUTH ──
+async function doLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const pw=document.getElementById('loginPw').value;
+  const err=document.getElementById('loginErr');
+  const btn=document.getElementById('loginBtn');
+  if(!email||!pw){err.textContent='Vul e-mail en wachtwoord in';return}
+  btn.disabled=true;btn.innerHTML='<span class="spin"></span> Bezig...';
+  err.textContent='';
+  const{error}=await SB.auth.signInWithPassword({email,password:pw});
+  if(error){
+    err.textContent=error.message==='Invalid login credentials'?'Onjuist e-mail of wachtwoord':error.message;
+    btn.disabled=false;btn.innerHTML='<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 7h7M9 5l3 2-3 2" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 2H3a1 1 0 00-1 1v8a1 1 0 001 1h4" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg> Inloggen';
+  }else{
+    showApp();
+  }
+}
+
+async function doLogout(){
+  await SB.auth.signOut();
+  document.getElementById('loginEmail').value='';
+  document.getElementById('loginPw').value='';
+  document.getElementById('loginErr').textContent='';
+  document.getElementById('loginScreen').style.display='flex';
+}
+
+function showApp(){
+  document.getElementById('loginScreen').style.display='none';
+  initApp();
+}
+
 // ── INIT ──
 (async()=>{
+  // Check for existing session
+  const{data:{session}}=await SB.auth.getSession();
+  if(session){
+    showApp();
+  }else{
+    // Show login, focus email field
+    setTimeout(()=>document.getElementById('loginEmail').focus(),100);
+  }
+})();
+
+async function initApp(){
   try{checked=JSON.parse(localStorage.getItem('sf_checked')||'{}')}catch(e){}
   const td=todayKey();
   Object.keys(checked).forEach(k=>{if(!k.startsWith(td+'_'))delete checked[k]});
@@ -573,7 +667,7 @@ function normPost(row){
   document.getElementById('pDt').value=new Date().toISOString().split('T')[0];
   document.getElementById('dayPicker').value=new Date().toISOString().split('T')[0];
   updateViewDateLabel();
-})();
+}
 
 // ── DATA LOADING ──
 async function loadClients(){
