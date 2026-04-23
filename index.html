@@ -482,6 +482,10 @@ select{cursor:pointer}select option{background:#fff}
           <button class="seg-btn" data-f="scheduled" onclick="setF('scheduled',this)">Gepland</button>
           <button class="seg-btn" data-f="published" onclick="setF('published',this)">Gepubliceerd</button>
         </div>
+        <button class="btn-new" style="background:var(--card);color:var(--t2);border:1px solid var(--sep)" onclick="openPdfModal()">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><rect x="1" y="1" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M3 4h5M3 6h5M3 8h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          PDF
+        </button>
         <button class="btn-new" onclick="openPM()">
           <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M5.5 1v9M1 5.5h9" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
           Nieuwe post
@@ -513,6 +517,47 @@ select{cursor:pointer}select option{background:#fff}
       </div>
     </div>
     <div class="plan-area" id="todayArea"></div>
+  </div>
+</div>
+
+<!-- PDF EXPORT MODAL -->
+<div class="ov" id="pdfModal" style="display:none" onclick="if(event.target===this)closePdfModal()">
+  <div class="mo" style="width:420px">
+    <div class="mh">
+      <h2>📄 Planning exporteren als PDF</h2>
+      <button class="mc" onclick="closePdfModal()">✕</button>
+    </div>
+    <div class="mb">
+      <div style="background:var(--accent-l);border-radius:var(--rx);padding:11px 14px;font-size:12px;color:var(--accent-d);font-weight:600">
+        Exporteert alle posts van de geselecteerde klant in de gekozen periode.
+      </div>
+      <div class="r2">
+        <div class="fi">
+          <label>Startdatum</label>
+          <input type="date" id="pdfFrom"/>
+        </div>
+        <div class="fi">
+          <label>Einddatum</label>
+          <input type="date" id="pdfTo"/>
+        </div>
+      </div>
+      <div class="fi">
+        <label>Snelkeuze</label>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="chip" style="cursor:pointer;border:none" onclick="setPdfPeriod('thismonth')">Deze maand</button>
+          <button class="chip" style="cursor:pointer;border:none" onclick="setPdfPeriod('nextmonth')">Volgende maand</button>
+          <button class="chip" style="cursor:pointer;border:none" onclick="setPdfPeriod('next30')">Komende 30 dagen</button>
+          <button class="chip" style="cursor:pointer;border:none" onclick="setPdfPeriod('next90')">Komende 3 maanden</button>
+        </div>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn-cancel" onclick="closePdfModal()">Annuleren</button>
+      <button class="btn-save" id="btnGenPdf" onclick="generatePdf()">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="1" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M3 5h7M3 7h7M3 9h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        PDF genereren
+      </button>
+    </div>
   </div>
 </div>
 
@@ -1706,6 +1751,118 @@ function renderPrevContent(platform){
     <button class="detail-btn" id="prevCopyBtn" onclick="prevCopyCaption()"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="4" y="4" width="7.5" height="7.5" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 3V2a1 1 0 011-1h5.5A1.5 1.5 0 0112 2.5V9a1 1 0 01-1 1H10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg> Caption kopiëren</button>`;
 }
 
+// ── PDF EXPORT ──
+function openPdfModal(){
+  setPdfPeriod('nextmonth');
+  document.getElementById('pdfModal').style.display='flex';
+}
+function closePdfModal(){document.getElementById('pdfModal').style.display='none'}
+
+function setPdfPeriod(preset){
+  const now=new Date();let from,to;
+  if(preset==='thismonth'){from=new Date(now.getFullYear(),now.getMonth(),1);to=new Date(now.getFullYear(),now.getMonth()+1,0);}
+  else if(preset==='nextmonth'){from=new Date(now.getFullYear(),now.getMonth()+1,1);to=new Date(now.getFullYear(),now.getMonth()+2,0);}
+  else if(preset==='next30'){from=new Date(now);to=new Date(now);to.setDate(to.getDate()+30);}
+  else if(preset==='next90'){from=new Date(now);to=new Date(now);to.setDate(to.getDate()+90);}
+  document.getElementById('pdfFrom').value=from.toISOString().split('T')[0];
+  document.getElementById('pdfTo').value=to.toISOString().split('T')[0];
+}
+
+async function generatePdf(){
+  const fromVal=document.getElementById('pdfFrom').value;
+  const toVal=document.getElementById('pdfTo').value;
+  if(!fromVal||!toVal){toast('Kies een periode');return}
+  const btn=document.getElementById('btnGenPdf');
+  btn.disabled=true;btn.innerHTML='<span class="spin"></span> Laden...';
+  const client=clients.find(c=>c.id===aid);
+  if(!client){btn.disabled=false;btn.textContent='PDF genereren';return}
+  const{data,error}=await SB.from('posts').select('*, post_files(*)').eq('client_id',aid).gte('date',fromVal).lte('date',toVal).order('date').order('time');
+  btn.disabled=false;btn.innerHTML='<svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="1" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M3 5h7M3 7h7M3 9h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg> PDF genereren';
+  if(error){toast('Fout: '+error.message);return}
+  const rows=(data||[]).map(normPost);
+  closePdfModal();
+  openPdfWindow(client,rows,fromVal,toVal);
+}
+
+function openPdfWindow(client,rows,fromVal,toVal){
+  const ini=client.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const color=client.color||'#1DC9A4';
+  const fmt=d=>new Date(d+'T12:00:00').toLocaleDateString('nl-NL',{day:'numeric',month:'long',year:'numeric'});
+  const fromDate=fmt(fromVal),toDate=fmt(toVal);
+  const MONTHS=['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+  const DAYS=['zo','ma','di','wo','do','vr','za'];
+  const SCOL={draft:'#8e8e93',scheduled:'#ff9500',published:'#34c759'};
+  const SNM={draft:'Concept',scheduled:'Gepland',published:'Gepubliceerd'};
+
+  // group by week
+  const byWeek={};
+  rows.forEach(p=>{
+    if(!p.date)return;
+    const d=new Date(p.date+'T12:00:00');
+    const mon=new Date(d);mon.setDate(d.getDate()-((d.getDay()+6)%7));
+    const wk=mon.toISOString().split('T')[0];
+    if(!byWeek[wk])byWeek[wk]={monday:mon,posts:[]};
+    byWeek[wk].posts.push(p);
+  });
+
+  let weeksHtml='';
+  Object.entries(byWeek).sort(([a],[b])=>a.localeCompare(b)).forEach(([,{monday,posts}])=>{
+    const end=new Date(monday);end.setDate(monday.getDate()+6);
+    const wkLabel=`Week van ${monday.getDate()} ${MONTHS[monday.getMonth()]} – ${end.getDate()} ${MONTHS[end.getMonth()]}`;
+    let ph='';
+    posts.forEach(p=>{
+      const d=new Date(p.date+'T12:00:00');
+      const dateStr=`${DAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]}`;
+      const src=p.imgFiles?.[0]?.url||'';
+      const img=src?`<img src="${src}" style="width:72px;height:72px;object-fit:contain;border-radius:8px;flex-shrink:0;background:#f2f2f7" crossorigin="anonymous">`
+        :`<div style="width:72px;height:72px;border-radius:8px;background:#f2f2f7;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:22px">📎</div>`;
+      ph+=`<div style="display:flex;gap:14px;padding:14px 0;border-bottom:1px solid #f2f2f7;break-inside:avoid">
+        ${img}
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:7px;flex-wrap:wrap">
+            <span style="font-size:11px;font-weight:700;color:#fff;background:${color};padding:2px 9px;border-radius:10px">${e(p.platform)}</span>
+            <span style="font-size:11px;font-weight:700;color:${SCOL[p.status]};background:${SCOL[p.status]}20;padding:2px 9px;border-radius:10px">${SNM[p.status]}</span>
+            <span style="font-size:11px;color:#8e8e93">${dateStr}${p.time?' · '+p.time:''}</span>
+            ${p.imgFiles?.length>1?`<span style="font-size:11px;color:#8e8e93">${p.imgFiles.length} bestanden</span>`:''}
+          </div>
+          <div style="font-size:13px;color:#1c1c1e;line-height:1.6;white-space:pre-wrap">${e(p.caption||'(geen caption)')}</div>
+          ${p.hashtags?.length?`<div style="font-size:11px;color:#007aff;font-weight:600;margin-top:5px">${p.hashtags.join(' ')}</div>`:''}
+        </div>
+      </div>`;
+    });
+    weeksHtml+=`<div style="margin-bottom:28px;break-inside:avoid">
+      <div style="font-size:11px;font-weight:700;color:${color};text-transform:uppercase;letter-spacing:.8px;padding:6px 0 10px;border-bottom:2px solid ${color}33;margin-bottom:2px">${wkLabel}</div>
+      ${ph}
+    </div>`;
+  });
+
+  const html=`<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8">
+<title>Planning ${e(client.name)}</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1c1c1e;padding:40px;max-width:780px;margin:0 auto}@media print{body{padding:20px}.np{display:none!important}@page{margin:1.5cm;size:A4}}</style>
+</head><body>
+<div class="np" style="position:fixed;top:20px;right:20px;display:flex;gap:10px">
+  <button onclick="window.print()" style="background:#1DC9A4;color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">🖨 Afdrukken / PDF opslaan</button>
+  <button onclick="window.close()" style="background:#f2f2f7;color:#3c3c43;border:none;border-radius:10px;padding:10px 16px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">Sluiten</button>
+</div>
+<div style="display:flex;align-items:center;gap:16px;margin-bottom:28px;padding-bottom:20px;border-bottom:2px solid #f2f2f7">
+  <div style="width:52px;height:52px;border-radius:14px;background:${color}1A;color:${color};display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;flex-shrink:0">${ini}</div>
+  <div style="flex:1"><div style="font-size:24px;font-weight:700">${e(client.name)}</div><div style="font-size:13px;color:#8e8e93;margin-top:3px">Content planning · ${fromDate} – ${toDate}</div></div>
+  <div style="text-align:right"><div style="font-size:28px;font-weight:700;color:${color}">${rows.length}</div><div style="font-size:11px;color:#8e8e93;text-transform:uppercase;letter-spacing:.5px">posts</div></div>
+</div>
+${rows.length?`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:28px">
+  <div style="background:#f9f9f9;border-radius:10px;padding:12px 14px"><div style="font-size:18px;font-weight:700;color:#8e8e93">${rows.filter(p=>p.status==='draft').length}</div><div style="font-size:10px;color:#aeaeb2;font-weight:600;text-transform:uppercase;letter-spacing:.5px">Concept</div></div>
+  <div style="background:#fff7e6;border-radius:10px;padding:12px 14px"><div style="font-size:18px;font-weight:700;color:#ff9500">${rows.filter(p=>p.status==='scheduled').length}</div><div style="font-size:10px;color:#b87000;font-weight:600;text-transform:uppercase;letter-spacing:.5px">Gepland</div></div>
+  <div style="background:#edfaf2;border-radius:10px;padding:12px 14px"><div style="font-size:18px;font-weight:700;color:#34c759">${rows.filter(p=>p.status==='published').length}</div><div style="font-size:10px;color:#1f8f3a;font-weight:600;text-transform:uppercase;letter-spacing:.5px">Gepubliceerd</div></div>
+</div>`:''}
+${weeksHtml||`<div style="text-align:center;padding:60px 20px;color:#8e8e93"><div style="font-size:44px;margin-bottom:16px">📭</div><div style="font-size:16px;font-weight:700;color:#3c3c43">Geen posts in deze periode</div></div>`}
+<div style="margin-top:36px;padding-top:14px;border-top:1px solid #f2f2f7;font-size:11px;color:#c7c7cc;display:flex;justify-content:space-between">
+  <span>Searchflow Content Planner</span><span>${new Date().toLocaleDateString('nl-NL',{day:'numeric',month:'long',year:'numeric'})}</span>
+</div>
+</body></html>`;
+  const win=window.open('','_blank','width=900,height=800');
+  win.document.write(html);win.document.close();
+}
+
 function hTag(ev){
   const inp=document.getElementById('ti');
   if((ev.key===' '||ev.key==='Enter')&&inp.value.trim()){
@@ -1718,7 +1875,7 @@ function rTags(){const w=document.getElementById('tw'),inp=document.getElementBy
 // ── UTILS ──
 function toast(msg){const t=document.getElementById('toast');document.getElementById('tmsg').textContent=msg;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2400)}
 function e(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-document.addEventListener('keydown',ev=>{if(ev.key==='Escape'){closePM();closePrev();closeDetail();document.getElementById('cm').style.display='none'}});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape'){closePM();closePrev();closeDetail();closePdfModal();document.getElementById('cm').style.display='none'}});
 </script>
 </body>
 </html>
